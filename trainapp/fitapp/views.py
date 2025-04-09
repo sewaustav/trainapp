@@ -1,3 +1,7 @@
 from django.shortcuts import render
 
-# Create your views here.
+def mainpage(request):
+    # здесь другие разрабы будут вставлять код
+    return render(request, 'fitapp/main.html')
+
+

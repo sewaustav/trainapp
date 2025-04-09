@@ -1,52 +1,17 @@
-<!DOCTYPE html>
-<html lang="ru">
-    <head>
-        <title>Main page</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="description" content="Prictice app">
-        
+{% extends 'fitapp/index.html' %}
+{% load static %}
 
-        <link rel="icon" href="" type="image/x-icon">
+{% block title %}Главная{% endblock %}
 
-        <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
-        <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
-        <link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
-        <link rel="stylesheet" href="css/nice-select.css" type="text/css">
-        <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
-        <link rel="stylesheet" href="css/magnific-popup.css" type="text/css">
-        <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
-        <link rel="stylesheet" type="text/css" href="css/style.css">
- 
-    
-    </head>
-    <body>
-        <div id="preloder">
-            <div class="loader"></div>
-        </div>
-        <header class="header-section header-normal">
-            <div class="container-fluid">
-                <div class="logo">
-                    <a href="#">
-                        <img src="img/logo.png" alt="">
-                    </a>
-                    </div>
-                    <div class="container">
-                        <div class="nav-menu">
-                            <nav class="mainmenu mobile-menu">
-                                <ul>
-                                    <li><a href="main.html">Главная</a></li>
-                                    <li><a href="training-main.html">Тренировки</a></li>
-                                    <li><a href="calendar.html">Календарь</a></li>
-                                    <li><a href="other.html">Прочее</a></li>
-                                </ul>
-                            </nav>
-                        </div>
-                    </div>
-                <div id="mobile-menu-wrap"></div>
-            </div>
-        </header>
-        <section class="top-label top-label-main" style="background-image: url('img/top-label.jpg');">
+{% block preloader %}
+<div id="preloder">
+    <div class="loader"></div>
+</div>
+{% endblock %}
+
+{% block main %}
+
+        <section class="top-label top-label-main" style="background-image: url({% static 'fitapp/img/top-label.jpg' %});">
             <div class="container-label">
                 <h1>Главная</h1><br>
                 <a href="#" class="start-btn">Начать прямо сейчас</a>
@@ -66,32 +31,32 @@
                     </ul>
                 </p>
             </div>
-            <img src="img/about-main.jpg">
+            <img src="{% static 'fitapp/img/about-main.jpg' %}">
         </section>
 
         <section class="go-training">
             <h2>Идем на тренировку</h2><br><br>
             <div class="container-go"> 
                 <a href="program-list.html" class="s">
-                    <div class="img-cont" style="background-image: url('img/program.jpg');">
+                    <div class="img-cont" style="background-image: url({% static 'fitapp/img/program.jpg' %});">
                         <div class="blur"></div>
                         <h4>Готовая программа</h4>
                     </div>
                 </a>
                 <a href="constructor.html" class="s">
-                    <div class="img-cont" style="background-image: url('img/personal.jpg');">
+                    <div class="img-cont" style="background-image: url({% static 'fitapp/img/personal.jpg' %});">
                         <div class="blur"></div>
                         <h4>Создание персональной тренировки</h4>
                     </div>
                 </a>
                 <a href="other.html" class="s">
-                    <div class="img-cont" style="background-image: url('img/calc.jpg');">
+                    <div class="img-cont" style="background-image: url({% static 'fitapp/img/calc.jpg' %});">
                         <div class="blur"></div>s
                         <h4>Калькуляторы и полезная инфа</h4>
                     </div>
                 </a>
                 <a href="calendar.html" class="s">
-                    <div class="img-cont" style="background-image: url('img/calendar.jpg');">
+                    <div class="img-cont" style="background-image: url({% static 'fitapp/img/calendar.jpg' %});">
                         <div class="blur"></div>
                         <h4>Календарь тренировок</h4>
                     </div>
@@ -161,7 +126,7 @@
                             </div>
                         </div>
                     </div>
-                    <img src="img/about-us.jpg" alt="">
+                    <img src="{% static 'firapp/img/about-us.jpg' %}}" alt="">
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="about-us">
@@ -188,34 +153,5 @@
                 </div>
             </div>
         </section>
+{% endblock %}
 
-        <footer>
-            <div class="footer-container">
-                <h4>Наши контакты</h4>
-                <ul>
-                    <li>Telegram</li>
-                    <li>Discord</li>
-                    <li>Email</li>
-                </ul>
-                <h4>Наши соцсети</h4>
-                <ul>
-                    <li>Instagram</li>
-                    <li>Telegram</li>
-                    <li>VK</li>
-                </ul>
-            </div>
-            <div>© 2025 Всеволод Устав. Все права защищены.</div>
-        </footer>
-
-        <!-- JS -->
-        <script src="js/jquery-3.3.1.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/jquery.magnific-popup.min.js"></script>
-        <script src="js/mixitup.min.js"></script>
-        <script src="js/jquery.nice-select.min.js"></script>
-        <script src="js/jquery.slicknav.js"></script>
-        <script src="js/owl.carousel.min.js"></script>
-        <script src="js/masonry.pkgd.min.js"></script>
-        <script src="js/main.js"></script>
-    </body>
-</html>

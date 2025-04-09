@@ -5,5 +5,5 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path(),
+    path('', include('fitapp.urls')),
 ]+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

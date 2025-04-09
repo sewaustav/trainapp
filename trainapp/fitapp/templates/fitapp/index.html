@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="Prictice app">
+
+
+        <link rel="icon" href="" type="image/x-icon">
+
+        <link rel="stylesheet" href="{% static 'fitapp/css/bootstrap.min.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'fitapp/css/font-awesome.min.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'fitapp/css/elegant-icons.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'fitapp/css/nice-select.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'fitapp/css/owl.carousel.min.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'fitapp/css/magnific-popup.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'fitapp/css/slicknav.min.css' %}" type="text/css">
+        <link rel="stylesheet" type="text/css" href="{% static 'fitapp/css/style.css' %}">
+
+
+    </head>
+    <body>
+        {% block preloader %}{% endblock %}
+
+        <header class="header-section header-normal">
+            <div class="container-fluid">
+                <div class="logo">
+                    <a href="#">
+                        <img src="img/logo.png" alt="">
+                    </a>
+                    </div>
+                    <div class="container">
+                        <div class="nav-menu">
+                            <nav class="mainmenu mobile-menu">
+                                <ul>
+                                    <li><a href="main.html">Главная</a></li>
+                                    <li><a href="training-main.html">Тренировки</a></li>
+                                    <li><a href="calendar.html">Календарь</a></li>
+                                    <li><a href="other.html">Прочее</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                <div id="mobile-menu-wrap"></div>
+            </div>
+        </header>
+        {% block main %} {% endblock %}
+        <footer>
+                <div class="footer-container">
+                    <h4>Наши контакты</h4>
+                    <ul>
+                        <li>Telegram</li>
+                        <li>Discord</li>
+                        <li>Email</li>
+                    </ul>
+                    <h4>Наши соцсети</h4>
+                    <ul>
+                        <li>Instagram</li>
+                        <li>Telegram</li>
+                        <li>VK</li>
+                    </ul>
+                </div>
+                <div>© 2025 Всеволод Устав. Все права защищены.</div>
+            </footer>
+
+            <!-- JS -->
+            <script src="{% static 'fitapp/js/jquery-3.3.1.min.js' %}"></script>
+            <script src="{% static 'fitapp/js/bootstrap.min.js' %}"></script>
+            <script src="{% static 'fitapp/js/jquery.magnific-popup.min.js' %}"></script>
+            <script src="{% static 'fitapp/js/mixitup.min.js' %}"></script>
+            <script src="{% static 'fitapp/js/jquery.nice-select.min.js' %}"></script>
+            <script src="{% static 'fitapp/js/jquery.slicknav.js' %}"></script>
+            <script src="{% static 'fitapp/js/owl.carousel.min.js' %}"></script>
+            <script src="{% static 'fitapp/js/masonry.pkgd.min.js' %}"></script>
+            <script src="{% static 'fitapp/js/main.js' %}"></script>
+    </body>
+</html>
