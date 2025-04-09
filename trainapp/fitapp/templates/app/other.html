@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <title>Main page</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="Prictice app">
+
+        <link rel="icon" href="" type="image/x-icon">
+
+        <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+        <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+        <link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
+        <link rel="stylesheet" href="css/nice-select.css" type="text/css">
+        <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
+        <link rel="stylesheet" href="css/magnific-popup.css" type="text/css">
+        <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+ 
+    
+    </head>
+    <body>
+        <header class="header-section header-normal">
+            <div class="container-fluid">
+                <div class="logo">
+                    <a href="#">
+                        <img src="img/logo.png" alt="">
+                    </a>
+                    </div>
+                    <div class="container">
+                        <div class="nav-menu">
+                            <nav class="mainmenu mobile-menu">
+                                <ul>
+                                    <li><a href="main.html">Главная</a></li>
+                                    <li><a href="training-main.html">Тренировки</a></li>
+                                    <li><a href="calendar.html">Календарь</a></li>
+                                    <li><a href="other.html">Прочее</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                <div id="mobile-menu-wrap"></div>
+            </div>
+        </header>
+        <section class="top-label-other" style="background-image: url('img/other.jpg');">
+            <div class="container-label-other">
+                <h1>Прочее</h1>
+            </div>
+        </section>
+
+        <section class="calculator">
+            <h3>Калькулятор расчета одноповторного максимума</h3>
+            <div class="other-cont">
+                
+                <div class="inp">
+                    <input type="number" id="weight" placeholder="Вес штанги"><br>
+                    <input type="number" id="reps" placeholder="Количество повторений"><br>
+                </div>
+                <button class="btn-result" onclick="calculate()">Рассчитать</button><br>
+                <span id="result">Ваш результат: 0</span>
+            </div>
+        </section>
+
+        <section class="lbs-kg-clc">
+            <h3>Перевод кг -> лбс / лбс -> кг</h3><br>
+            <div class="other-cont">
+                
+                <div class="toggle-container" onclick="toggleSwitch()">
+                    <div class="toggle" id="toggle"></div>
+                </div><br>
+
+                <span id="toggle-label">Lbs to Kg</span><br><br>
+                <div class="container-clc">
+                    <div class="content-clc block1" id="block1">
+                        <div class="inp">
+                            <input type="number" id="lbs-inp" placeholder="lbs">
+                            <button onclick="convertToKg()" class="btn-result">Перевести</button><br>
+                            <span id="lbs_res">0 Kg</span>
+                        </div>
+                    </div>
+                    <div class="content-clc block2" id="block2">
+                        <div class="inp">
+                            <input type="number" id="kg-inp" placeholder="kg">
+                            <button onclick="convertToLbs()" class="btn-result">Перевести</button><br>
+                            <span id="kg_res">0 Lbs</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h3>Расчет веса штанги</h3>
+        </section>
+
+        <footer>
+            <div class="footer-container">
+                <h4>Наши контакты</h4>
+                <ul>
+                    <li>Telegram</li>
+                    <li>Discord</li>
+                    <li>Email</li>
+                </ul>
+                <h4>Наши соцсети</h4>
+                <ul>
+                    <li>Instagram</li>
+                    <li>Telegram</li>
+                    <li>VK</li>
+                </ul>
+            </div>
+            <div>© 2025 Всеволод Устав. Все права защищены.</div>
+        </footer>
+
+
+        <script>
+            function calculate() {
+                let weight = parseFloat(document.getElementById('weight').value);
+                let reps = parseFloat(document.getElementById('reps').value);
+
+
+                let r1 = weight * (1 + (reps/30)); // эпли 
+                let r2 = weight * (36/(37-reps)); // бржецкий
+                let r3 = (100 * weight) / (101.3 - 2.67123 * reps); // лэндер
+                let r4 = weight * (1 + 0.025 * reps); // конор ебучий пиздабол
+                let r5 = weight * reps ** 0.1;
+                let r6 = (100 * weight) / (48.8 + 53.8 * Math.exp(-0.075 * reps));
+                let r7 = (100 * weight) / (52.2 + 41.9 * Math.exp(-0.055 * reps));
+
+                let result;
+                if (reps < 7) {
+                    result = (r1 + r2 + r3) / 3;
+                }
+                else {
+                    result = (r1 + r2 + r3 + r4 + r5 + r6 + r7) / 7;
+                }
+                result = Math.round(result);
+                document.getElementById("result").textContent = "Ваш результат: " + result;
+            }
+
+            function toggleSwitch() {
+                let toggle = document.getElementById("toggle");
+                let block1 = document.getElementById("block1");
+                let block2 = document.getElementById("block2");
+                let label = document.getElementById("toggle-label");
+
+
+                toggle.classList.toggle("active");
+                
+                if (block1.style.display === "none") {
+                    block1.style.display = "flex";
+                    block2.style.display = "none";
+                    label.textContent = "LBS to KG";
+                } else {
+                    block1.style.display = "none";
+                    block2.style.display = "flex";
+                    label.textContent = "KG to LBS";
+                }
+            }
+
+            function convertToKg() {
+                let lbs = document.getElementById('lbs-inp').value;
+                document.getElementById('lbs_res').textContent = (lbs * 0.453592).toFixed(2);
+                
+            }
+
+            function convertToLbs() {
+                let kg = document.getElementById('kg-inp').value;
+                document.getElementById('kg_res').textContent = (kg / 0.453592).toFixed(2);
+            }
+
+
+
+
+        </script>
+        <script src="js/jquery-3.3.1.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/jquery.magnific-popup.min.js"></script>
+        <script src="js/mixitup.min.js"></script>
+        <script src="js/jquery.nice-select.min.js"></script>
+        <script src="js/jquery.slicknav.js"></script>
+        <script src="js/owl.carousel.min.js"></script>
+        <script src="js/masonry.pkgd.min.js"></script>
+        <script src="js/main.js"></script>
+    </body>
+</html>
