@@ -49,7 +49,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'trainapp.wsgi.application'
 
-# на сервере поменяем на postgres
+# потом поменяем на postgres
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
