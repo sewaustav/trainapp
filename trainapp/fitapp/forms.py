@@ -10,10 +10,8 @@ class WorkoutForm(ModelForm):
         model = Workout
         fields = '__all__'
         widgets = {'user': TextInput(attrs={'class': 'input-name-workout', 'placeholder': 'Название тренировки'}),
-                   'date': DateInput(attrs={'class': 'input-date-workout',
-                                            'placeholder': 'МЫ пока не знаем че делает эта хуйня(введите время)'}),
-                   'notes': Textarea(attrs={'class': 'input-notes-workout',
-                                            'placeholder': 'Введите <UNK> <UNK> <UNK> <UNK> <UNK> <UNK>(<UNK> <UNK>)'}), }
+                   'date': DateInput(attrs={'class': 'input-date-workout', 'placeholder': 'МЫ пока не знаем че делает эта хуйня(введите время)'}),
+                   'notes': Textarea(attrs={'class': 'input-notes-workout', 'placeholder': 'Введите <UNK> <UNK> <UNK> <UNK> <UNK> <UNK>(<UNK> <UNK>)'}), }
         labels = {'user': '',
                   'date': '',
                   'notes': ''}
@@ -27,5 +25,4 @@ class WorkoutExerciseForm(ModelForm):
                    'exercise': TextInput(attrs={'class': 'input-exercise', 'placeholder': '<UNK> <UNK> <UNK> <UNK>'}),
                    'sets': IntegerField(attrs={'class': 'input-sets', 'placeholder': '<UNK> <UNK> <UNK> <UNK> <UNK>'}),
                    'reps': IntegerField(attrs={'class': 'input-reps', 'placeholder': '<UNK> <UNK> <UNK> <UNK> <UNK>'}),
-                   'weight': FloatField(
-                       attrs={'class': 'input-weight', 'placeholder': '<UNK> <UNK> <UNK> <UNK> <UNK>'}), }
+                   'weight': FloatField(attrs={'class': 'input-weight', 'placeholder': '<UNK> <UNK> <UNK> <UNK> <UNK>'}), }
