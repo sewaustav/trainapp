@@ -2,6 +2,7 @@ from django.db import models
 from datetime import *
 from django.contrib.auth.models import User
 
+
 # при изменении дефолтной модели User обязательно добавить поля : рост - float; вес - float; жим, становая, присед, бицепс - float
 
 class Exercise(models.Model):
@@ -17,6 +18,7 @@ class Exercise(models.Model):
         verbose_name = "Exercise"
         verbose_name_plural = "Exercise"
 
+
 class Workout(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="workouts")
     date = models.DateField(default=datetime.now())
@@ -28,6 +30,7 @@ class Workout(models.Model):
     class Meta:
         verbose_name = "Workout"
         verbose_name_plural = "Workout"
+
 
 class WorkoutExercise(models.Model):
     workout = models.ForeignKey(Workout, on_delete=models.CASCADE, related_name="exercises")
@@ -43,6 +46,7 @@ class WorkoutExercise(models.Model):
         verbose_name = "WorkoutExercise"
         verbose_name_plural = "WorkoutExercise"
 
+
 class Dprogram(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
@@ -54,6 +58,7 @@ class Dprogram(models.Model):
     class Meta:
         verbose_name = "Dprogram"
         verbose_name_plural = "Dprogram"
+
 
 class ProgramExercise(models.Model):
     program = models.ForeignKey(Dprogram, on_delete=models.CASCADE)

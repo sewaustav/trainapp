@@ -4,7 +4,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-0!ngn82-l3-z319w2du+7f%r&t=2$gn#w6ggd=@xcxlj%pk(=b'
 
-
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -72,8 +71,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-
 LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'UTC'
@@ -82,13 +79,11 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
     '/var/www/static/',
 ]
-
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
