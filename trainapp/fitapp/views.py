@@ -4,6 +4,10 @@ from .forms import WorkoutForm, WorkoutExerciseForm
 from .models import *
 from django.views.generic import *
 
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
+from .serializers import *
+
 
 def mainpage(request):
     # здесь другие разрабы будут вставлять код
@@ -98,3 +102,44 @@ def DetailProgram(request, program_name):
     }
 
     return render(request, 'fitapp/program-detail.html', data)
+
+
+# api
+class FitapplistViewSet(viewsets.ModelViewSet):
+    queryset = Exercise.objects.all()
+    serializer_class = ExerciseSerializer
+    permission_classes = [IsAuthenticated]
+
+class WorkoutlistViewSet(viewsets.ModelViewSet):
+    queryset = Workout.objects.all()
+    serializer_class = WorkoutSerializer
+    permission_classes = [IsAuthenticated]
+
+class WorkoutExerciselistViewSet(viewsets.ModelViewSet):
+    queryset = WorkoutExercise.objects.all()
+    serializer_class = WorkoutExerciseSerializer
+    permission_classes = [IsAuthenticated]
+
+class DprogramlistViewSet(viewsets.ModelViewSet):
+    queryset = Dprogram.objects.all()
+    serializer_class = DprogramSerializer
+    permission_classes = [IsAuthenticated]
+
+
+class ProgramExerciselistViewSet(viewsets.ModelViewSet):
+    queryset = ProgramExercise.objects.all()
+    serializer_class = ProgramExerciseSerializer
+    permission_classes = [IsAuthenticated]
+
+
+class WorkoutResultlistViewSet(viewsets.ModelViewSet):
+    queryset = WorkoutResult.objects.all()
+    serializer_class = WorkoutResultSerializer
+    permission_classes = [IsAuthenticated]
+
+
+class WorkoutResultSetlistViewSet(viewsets.ModelViewSet):
+    queryset = WorkoutResultSet.objects.all()
+    serializer_class = WorkoutResultSetSerializer
+    permission_classes = [IsAuthenticated]
+

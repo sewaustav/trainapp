@@ -6,4 +6,5 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('fitapp.urls')),
+    path('api/', include('fitapp.api_urls')),
 ]+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
