@@ -22,7 +22,7 @@ class Exercise(models.Model):
 class Workout(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="workouts")
     name = models.CharField(max_length=100, null=True)
-    date = models.DateField(default=datetime.now())
+    date = models.DateField(default=datetime.now(), blank=True)
     notes = models.TextField(blank=True, null=True)
 
     def __str__(self):
@@ -50,6 +50,7 @@ class WorkoutExercise(models.Model):
 
 class Dprogram(models.Model):
     name = models.CharField(max_length=100)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="program")
     description = models.TextField()
     type_of_program = models.CharField(max_length=100, blank=True, null=True)
 
@@ -74,3 +75,31 @@ class ProgramExercise(models.Model):
     class Meta:
         verbose_name = "ProgramExercise"
         verbose_name_plural = "ProgramExercise"
+
+class WorkoutResult(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100, null=True)
+    date = models.DateField(default=datetime.now(), blank=True)
+    notes = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.date}"
+
+    class Meta:
+        verbose_name = "WorkoutResult"
+        verbose_name_plural = "WorkoutResult"
+
+class WorkoutResultSet(models.Model):
+    workout = models.ForeignKey(WorkoutResult, on_delete=models.CASCADE)
+    exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE)
+    set = models.IntegerField()
+    rep = models.IntegerField()
+    weight = models.FloatField()
+
+    def __str__(self):
+        return f"{self.exercise.name} on {self.workout.date}"
+
+    class Meta:
+        verbose_name = "WorkoutResultSet"
+        verbose_name_plural = "WorkoutResultSet"
+

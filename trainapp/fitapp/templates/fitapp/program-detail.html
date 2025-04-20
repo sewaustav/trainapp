@@ -1,0 +1,17 @@
+{% extends 'fitapp/index.html' %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block preloader %}
+
+{% endblock %}
+
+{% block main %}
+
+    {% for ex in exercises %}
+        <p>{{ ex.exercise.name }}</p>
+        <p>{{ ex.sets }}</p>
+        <p>{{ ex.reps }}</p>
+    {% endfor %}
+{% endblock %}

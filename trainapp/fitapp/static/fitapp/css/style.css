@@ -829,6 +829,8 @@ ol {
 	width: 400px;
 	height: 35px;
 	padding-left: 10px;
+	appearance: none;
+	border-radius: 10px;
 }
 
 .ex-name-cont span {

@@ -15,221 +15,57 @@
             </div>
         </section>
         <section class="single-training">
-            <h2 class="tr-page">Тренировка руки</h2>
-            <p class="date-single">27/03/2025</p>
-            <div class="container-st">
-                <div class="st-exercise-cont">
-                    <div class="st-title">Кисти</div><br>
-                    <div class="st-description">
-                        <form> <!-- см джава скрипт -->
-                            <div class="set-head">
-                                <div>Вес (кг)</div>
-                                <div id="d2">Повт.</div>
-                            </div>
-                            <div class="set-single">
-                                <span>1</span>
-                                <input type="number">
-                                <input type="number">
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" class="color-toggle">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <div class="set-single">
-                                <span>2</span>
-                                <input type="number">
-                                <input type="number">
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" class="color-toggle">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <div class="set-single">
-                                <span>3</span>
-                                <input type="number">
-                                <input type="number">
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" class="color-toggle">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="st-exercise-cont">
-                    <div class="st-title">Пронация</div><br>
-                    <div class="st-description">
-                        <form>
-                            <div class="set-head">
-                                <div>Вес (кг)</div>
-                                <div id="d2">Повт.</div>
-                            </div>
-                            <div class="set-single">
-                                <span>1</span>
-                                <input type="number">
-                                <input type="number">
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" class="color-toggle">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <div class="set-single">
-                                <span>2</span>
-                                <input type="number">
-                                <input type="number">
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" class="color-toggle">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <div class="set-single">
-                                <span>3</span>
-                                <input type="number">
-                                <input type="number">
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" class="color-toggle">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="st-exercise-cont">
-                    <div class="st-title">Пальцы</div><br>
-                    <div class="st-description">
-                        <form>
-                            <div class="set-head">
-                                <div>Вес (кг)</div>
-                                <div id="d2">Повт.</div>
-                            </div>
-                            <div class="set-single">
-                                <span>1</span>
-                                <input type="number">
-                                <input type="number">
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" class="color-toggle">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <div class="set-single">
-                                <span>2</span>
-                                <input type="number">
-                                <input type="number">
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" class="color-toggle">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <div class="set-single">
-                                <span>3</span>
-                                <input type="number">
-                                <input type="number">
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" class="color-toggle">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                        </form>
+            <form method="post">
 
-                    </div>
-                </div>
-                <div class="st-exercise-cont">
-                    <div class="st-title">Отведение</div><br>
-                    <div class="st-description">
-                        <form>
-                            <div class="set-head">
-                                <div>Вес (кг)</div>
-                                <div id="d2">Повт.</div>
-                            </div>
-                            <div class="set-single">
-                                <span>1</span>
-                                <input type="number">
-                                <input type="number">
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" class="color-toggle">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <div class="set-single">
-                                <span>2</span>
-                                <input type="number">
-                                <input type="number">
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" class="color-toggle">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <div class="set-single">
-                                <span>3</span>
-                                <input type="number">
-                                <input type="number">
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" class="color-toggle">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                        </form>
+                {% csrf_token %}
 
+                {{ form.as_p }}
+                {% for ex in exercise %}
+                  <div class="container-st">
+                    <div class="st-exercise-cont">
+                      <div class="st-title">{{ ex.exercise }}</div><br>
+                      <div class="st-description" data-sets="{{ ex.sets }}" data-form-index="{{ forloop.counter0 }}">
+                        <div class="set-head">
+                          <div>Вес (кг)</div>
+                          <div id="d2">Повт.</div>
+                        </div>
+                        <!-- Контейнер, в который добавим повторы -->
+                        <div class="set-list"></div>
+                      </div>
                     </div>
-                </div>
-                <div class="st-exercise-cont">
-                    <div class="st-title">Арм</div><br>
-                    <div class="st-description">
-                        <form>
-                            <div class="set-head">
-                                <div>Вес (кг)</div>
-                                <div id="d2">Повт.</div>
-                            </div>
-                            <div class="set-single">
-                                <span>1</span>
-                                <input type="number">
-                                <input type="number">
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" class="color-toggle">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <div class="set-single">
-                                <span>2</span>
-                                <input type="number">
-                                <input type="number">
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" class="color-toggle">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <div class="set-single">
-                                <span>3</span>
-                                <input type="number">
-                                <input type="number">
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" class="color-toggle">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                        </form>
+                  </div>
+                {% endfor %}
 
-                    </div>
-                </div>
                 <button id="submit-all" class="btn-result">Закончить тренировку</button>
-            </div>
+            </form>
         </section>
 
         <script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".st-description").forEach(function (descEl) {
+    const setsCount = parseInt(descEl.dataset.sets);
+    const formIndex = descEl.dataset.formIndex;
+    const setList = descEl.querySelector(".set-list");
 
-        document.querySelectorAll('.color-toggle').forEach(checkbox => {
-            checkbox.addEventListener('change', () => {
-                const parent = checkbox.closest('.set-single');
-                parent.classList.toggle('active', checkbox.checked);
-            });
-        });
-        document.getElementById('submit-all').addEventListener('click', function () {
-            document.getElementById('form1').submit(); // потом добавть айди
-            document.getElementById('form1').submit();
-            document.getElementById('form1').submit();
-            document.getElementById('form1').submit();
-            document.getElementById('form1').submit();
-        });
+    for (let i = 0; i < setsCount; i++) {
+      const setDiv = document.createElement("div");
+      setDiv.className = "set-single";
+
+      setDiv.innerHTML = `
+        <span>${i + 1}</span>
+        <input name="form-${formIndex}-${i}-weight" type="number">
+        <input name="form-${formIndex}-${i}-reps" type="number">
+        <label class="custom-checkbox">
+          <input type="checkbox" class="color-toggle">
+          <span class="checkmark"></span>
+        </label>
+      `;
+
+      setList.appendChild(setDiv);
+    }
+  });
+});
+
         </script>
 
 

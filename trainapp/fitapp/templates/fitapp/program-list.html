@@ -19,11 +19,10 @@
         <section class="go-programm">
             <div class="go-go">
                 <h2 class="tr-page">Список программ</h2>
-                <div class="program-list-demo" style="background-image: url({% static 'fitapp/img/program-ph.jpg' %});"><h3>Тяни - толкай</h3></div>
-                <div class="program-list-demo" style="background-image: url({% static 'fitapp/img/program-ph.jpg' %});"><h3>Сплит</h3></div>
-                <div class="program-list-demo" style="background-image: url({% static 'fitapp/img/program-ph.jpg' %});"><h3>Фулбади 1</h3></div>
-                <div class="program-list-demo" style="background-image: url({% static 'fitapp/img/program-ph.jpg' %});"><h3>Фулбади 2</h3></div>
-                <div class="program-list-demo" style="background-image: url({% static 'fitapp/img/program-ph.jpg' %});"><h3>Арм</h3></div>
+                {% for program in programs %}
+                    <a href="{% url 'dprogram' program.name %}" class="program-list-demo" style="background-image: url({% static 'fitapp/img/program-ph.jpg' %});"><h3>{{ program.name }}</h3></a>
+                    <a href="{% url 'tr' program.name %}" class="start-tr-btn">Начать тренировку</a>
+                {% endfor %}
             </div>
         </section>
 

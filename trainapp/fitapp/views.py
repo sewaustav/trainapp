@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 
 from .forms import WorkoutForm, WorkoutExerciseForm
 from .models import *
+from django.views.generic import *
 
 
 def mainpage(request):
@@ -42,3 +43,58 @@ def constructor(request):
             }
 
     return render(request, 'fitapp/constructor.html', data)
+
+def WorkoutFunc(request, program_name):
+    form = WorkoutForm()
+    program = Dprogram.objects.get(name=program_name)
+    exercises = ProgramExercise.objects.filter(program=program)
+    if request.method == 'POST':
+        workout = WorkoutResult.objects.create(
+            user=request.user,
+            name=request.POST.get('name', 'Без названия'),
+            notes=request.POST.get('notes', '')
+        )
+        for ex_index, program_ex in enumerate(exercises):
+            sets = program_ex.sets
+            exercise = program_ex.exercise
+
+            for set_index in range(sets):
+                weight_key = f"form-{ex_index}-{set_index}-weight"
+                reps_key = f"form-{ex_index}-{set_index}-reps"
+                weight = request.POST.get(weight_key)
+                reps = request.POST.get(reps_key)
+
+                if weight and reps:
+                    WorkoutResultSet.objects.create(
+                        workout=workout,
+                        exercise=exercise,
+                        set=set_index + 1,
+                        weight=float(weight),
+                        rep=int(reps)
+                    )
+
+        return redirect('mainpage')
+
+
+    data = {
+        'form':form,
+        'exercise': exercises,
+    }
+
+    return render(request, 'fitapp/training-single.html', data)
+
+class ProgramList(ListView):
+    model = Dprogram
+    context_object_name = 'programs'
+    template_name = 'fitapp/program-list.html'
+
+def DetailProgram(request, program_name):
+    program = Dprogram.objects.get(name=program_name)
+    exercises = ProgramExercise.objects.filter(program=program)
+
+    data = {
+        'title': program_name,
+        'exercises': exercises,
+    }
+
+    return render(request, 'fitapp/program-detail.html', data)

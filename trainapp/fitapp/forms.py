@@ -27,3 +27,16 @@ class WorkoutExerciseForm(ModelForm):
                    'sets': NumberInput(attrs={'class': 'input-sets', 'placeholder': 'подход'}),
                    'reps': NumberInput(attrs={'class': 'input-reps', 'placeholder': 'повторения'}),
                    'weight': NumberInput(attrs={'class': 'input-weight', 'placeholder': 'вес'}), }
+
+class WorkoutResultForm(ModelForm):
+    class Meta:
+        model = WorkoutResult
+        fields = '__all__'
+        exclude = ['user']
+        widgets = {'name': TextInput(attrs={'class': 'input-name-workout', 'placeholder': 'Название тренировки'}),
+                   'date': DateInput(attrs={'class': 'input-date-workout', 'placeholder': 'Время'}),
+                   'notes': Textarea(attrs={'class': 'input-notes-workout', 'placeholder': 'Заметки к тренировке'}), }
+        labels = {'name': '',
+                  'date': '',
+                  'notes': ''}
+
