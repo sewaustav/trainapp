@@ -9,10 +9,11 @@ class WorkoutForm(ModelForm):
     class Meta:
         model = Workout
         fields = '__all__'
-        widgets = {'user': TextInput(attrs={'class': 'input-name-workout', 'placeholder': 'Название тренировки'}),
-                   'date': DateInput(attrs={'class': 'input-date-workout', 'placeholder': 'МЫ пока не знаем че делает эта хуйня(введите время)'}),
-                   'notes': Textarea(attrs={'class': 'input-notes-workout', 'placeholder': 'Введите <UNK> <UNK> <UNK> <UNK> <UNK> <UNK>(<UNK> <UNK>)'}), }
-        labels = {'user': '',
+        exclude = ['user']
+        widgets = {'name': TextInput(attrs={'class': 'input-name-workout', 'placeholder': 'Название тренировки'}),
+                   'date': DateInput(attrs={'class': 'input-date-workout', 'placeholder': 'Время'}),
+                   'notes': Textarea(attrs={'class': 'input-notes-workout', 'placeholder': 'Заметки к тренировке'}), }
+        labels = {'name': '',
                   'date': '',
                   'notes': ''}
 
@@ -21,8 +22,8 @@ class WorkoutExerciseForm(ModelForm):
     class Meta:
         model = WorkoutExercise
         fields = '__all__'
-        widgets = {'workout': TextInput(attrs={'class': 'input-exercise', 'placeholder': '<UNK> <UNK>'}),
-                   'exercise': TextInput(attrs={'class': 'input-exercise', 'placeholder': '<UNK> <UNK> <UNK> <UNK>'}),
-                   'sets': IntegerField(attrs={'class': 'input-sets', 'placeholder': '<UNK> <UNK> <UNK> <UNK> <UNK>'}),
-                   'reps': IntegerField(attrs={'class': 'input-reps', 'placeholder': '<UNK> <UNK> <UNK> <UNK> <UNK>'}),
-                   'weight': FloatField(attrs={'class': 'input-weight', 'placeholder': '<UNK> <UNK> <UNK> <UNK> <UNK>'}), }
+        widgets = {'workout': TextInput(attrs={'class': 'input-exercise', 'placeholder': 'Тренировка'}),
+                   'exercise': TextInput(attrs={'class': 'input-exercise', 'placeholder': 'упражнение'}),
+                   'sets': NumberInput(attrs={'class': 'input-sets', 'placeholder': 'подход'}),
+                   'reps': NumberInput(attrs={'class': 'input-reps', 'placeholder': 'повторения'}),
+                   'weight': NumberInput(attrs={'class': 'input-weight', 'placeholder': 'вес'}), }

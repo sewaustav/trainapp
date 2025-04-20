@@ -21,6 +21,7 @@ class Exercise(models.Model):
 
 class Workout(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="workouts")
+    name = models.CharField(max_length=100, null=True)
     date = models.DateField(default=datetime.now())
     notes = models.TextField(blank=True, null=True)
 

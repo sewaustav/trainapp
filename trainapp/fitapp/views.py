@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 
-from trainapp.fitapp.forms import WorkoutForm, WorkoutExerciseForm
+from .forms import WorkoutForm, WorkoutExerciseForm
+from .models import *
 
 
 def mainpage(request):
@@ -12,16 +13,32 @@ def mainpage(request):
 
 def constructor(request):
     if request.method == "POST":
-        if 'workout-btn' in request.POST:
-            form = WorkoutForm(request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect('mainpage')
-        elif 'workout-exercise-btn' in request.POST:
-            form_workout = WorkoutExerciseForm(request.POST)
-            if form_workout.is_valid():
-                form_workout.save()
-                return redirect('mainpage')
-    data = {'form': WorkoutForm(), 'workout-exercise-form': WorkoutExerciseForm()}
+        form = WorkoutForm(request.POST)
+        if form.is_valid():
+            workout = form.save(commit=False)
+            workout.user = request.user
+            workout.save()
+            total_forms = int(request.POST.get("form-TOTAL_FORMS", 0))
+            for i in range(total_forms):
+                exercise_id = request.POST.get(f"form-{i}-exercise")
+                sets = request.POST.get(f"form-{i}-sets")
+                reps = request.POST.get(f"form-{i}-reps")
+                weight = request.POST.get(f"form-{i}-weight")
+                if exercise_id and sets and reps and weight:
+                    exercise = Exercise.objects.get(id=exercise_id)
+                    WorkoutExercise.objects.create(
+                        workout=workout,
+                        exercise=exercise,
+                        sets=sets,
+                        reps=reps,
+                        weight=weight,
+                    )
+            return redirect('mainpage')
+    else:
+            workout_form = WorkoutForm()
+    data = {'form': WorkoutForm(),
+            'workout-exercise-form': WorkoutExerciseForm(),
+            'exercises': Exercise.objects.all()
+            }
 
     return render(request, 'fitapp/constructor.html', data)

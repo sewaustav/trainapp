@@ -8,72 +8,61 @@
 {% endblock %}
 
 {% block main %}
-        <form><section class="training-single" id="exercise-container">
-            
-            <h1>Создай свою тренировку</h1>
-            <div class="exercise">
-                <h3>Упражнение</h3>
-                <div class="exercise-cont">
-                    <div class="ex-name-cont">
-                        <span>Упражнение 1</span><br>
-                        <input type="text" class="input-exercise" placeholder="Название упражнения">
-                    </div>
-                    <div class="ex-cont set-cont">
-                        <span>подход</span><br>
-                        <input type="number" class="ex-inp input-set" placeholder="1-5">
-                    </div>
-                    <div class="ex-cont reps-cont">
-                        <span>повторение</span><br>
-                        <input class="ex-inp input-rep" placeholder="1-12">
-                    </div>
-                    <div class="ex-cont weight-cont">
-                        <span>вес</span><br>
-                        <input class="ex-inp input-weight" placeholder="1-500">
-                    </div>
-                </div>
-            </div>
-            
-        </section>
-        <button class="btn-result" id="create-tr" type="submit">Сохранить тренировку</button>
-    </form>
-        <button onclick="addExercise()" id="add-exercise">Добавить упражнение</button>
+<form method="post">
+  {% csrf_token %}
 
-        <script type="text/javascript">
-let count = 2;
+  <!-- Информация о тренировке -->
+  <section id="workout-info">
+    {{ form.as_p }}
+  </section>
 
-function addExercise() {
-    const exerciseContainer = document.getElementById('exercise-container');
-    const newExercise = document.createElement('div');
-    newExercise.classList.add('exercise');
+  <hr>
 
-    newExercise.innerHTML = `
-        <h3>Упражнение </h3>
-        <div class="exercise-cont">
-            <div class="ex-name-cont">
-                <span>Упражнение ${count}</span><br>
-                <input type="text" class="input-exercise" placeholder="Введите название упражнения">
-            </div>
-            <div class="ex-cont set-cont">
-                <span>подход</span><br>
-                <input type="number" class="ex-inp input-set" placeholder="1-5">
-            </div>
-            <div class="ex-cont reps-cont">
-                <span>повторение</span><br>
-                <input class="ex-inp input-rep" placeholder="1-12">
-            </div>
-            <div class="ex-cont weight-cont">
-                <span>вес</span><br>
-                <input class="ex-inp input-weight" placeholder="1-500">
-            </div>
-        </div>
-    `;
-    count++;
-    if (count < 22) {
-        exerciseContainer.appendChild(newExercise);
-    } else {
-        console.log(count);
-        alert("Вы достигли лимита упражнений за тренировку");
-    }
+  <!-- Формы упражнений -->
+  <section id="exercise-formset">
+    <div class="exercise-form">
+      <select name="form-0-exercise" class="input-exercise">
+        {% for ex in exercises %}
+          <option value="{{ ex.id }}">{{ ex.name }}</option>
+        {% endfor %}
+      </select>
+      <input type="number" name="form-0-sets" placeholder="Подходы" class="input-sets" />
+      <input type="number" name="form-0-reps" placeholder="Повторения" class="input-reps" />
+      <input type="number" step="0.1" name="form-0-weight" placeholder="Вес" class="input-weight" />
+    </div>
+  </section>
+
+  <!-- Скрытые поля для имитации formset -->
+  <input type="hidden" name="form-TOTAL_FORMS" value="1" id="id_form-TOTAL_FORMS" />
+  <input type="hidden" name="form-INITIAL_FORMS" value="0" />
+  <input type="hidden" name="form-MIN_NUM_FORMS" value="0" />
+  <input type="hidden" name="form-MAX_NUM_FORMS" value="1000" />
+
+  <button type="button" onclick="addExerciseForm()">Добавить упражнение</button>
+  <button type="submit" name="save-all">Сохранить тренировку</button>
+</form>
+
+<script>
+let formIdx = 1;
+const exerciseOptions = `{% for ex in exercises %}<option value="{{ ex.id }}">{{ ex.name }}</option>{% endfor %}`;
+
+function addExerciseForm() {
+  const formset = document.getElementById('exercise-formset');
+  const newForm = document.createElement('div');
+  newForm.classList.add('exercise-form');
+  newForm.innerHTML = `
+    <select name="form-${formIdx}-exercise" class="input-exercise">
+      ${exerciseOptions}
+    </select>
+    <input type="number" name="form-${formIdx}-sets" placeholder="Подходы" class="input-sets" />
+    <input type="number" name="form-${formIdx}-reps" placeholder="Повторения" class="input-reps" />
+    <input type="number" step="0.1" name="form-${formIdx}-weight" placeholder="Вес" class="input-weight" />
+  `;
+  formset.appendChild(newForm);
+  document.getElementById('id_form-TOTAL_FORMS').value = ++formIdx;
 }
+</script>
+
+
 
 {% endblock %}
