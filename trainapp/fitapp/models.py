@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 class Exercise(models.Model):
     name = models.CharField(max_length=100)
     muscle_group = models.CharField(max_length=100)
+    second_group = models.CharField(max_length=100, null=True, blank=True)
+    third_group = models.CharField(max_length=100, null=True, blank=True)
     rating = models.IntegerField(blank=True, null=True)
     img = models.CharField(max_length=200, blank=True, null=True)
 
