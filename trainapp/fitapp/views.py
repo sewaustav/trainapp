@@ -4,9 +4,12 @@ from .forms import WorkoutForm, WorkoutExerciseForm
 from .models import *
 from django.views.generic import *
 
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from .serializers import *
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 
 
 def mainpage(request):
@@ -105,6 +108,16 @@ def DetailProgram(request, program_name):
 
 
 # api
+@api_view(['DELETE'])
+@permission_classes([AllowAny]) # временная фича пока не завезут регистрацию
+def delete_program_by_name(request, name):
+    try:
+        program = Dprogram.objects.get(name=name)  
+        program.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    except Dprogram.DoesNotExist:
+        return Response({"error": "Программа не найдена"}, status=status.HTTP_404_NOT_FOUND)
+
 class FitapplistViewSet(viewsets.ModelViewSet):
     queryset = Exercise.objects.all()
     serializer_class = ExerciseSerializer
