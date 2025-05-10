@@ -1,7 +1,5 @@
 from pathlib import Path
 
-
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-0!ngn82-l3-z319w2du+7f%r&t=2$gn#w6ggd=@xcxlj%pk(=b'
@@ -17,10 +15,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 'django.contrib.sites',
     'fitapp.apps.FitappConfig',
     'corsheaders',
-    'rest_framework',
-    'rest_framework.authtoken',
+    # 'rest_framework',
+    # 'rest_framework.authtoken',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
@@ -33,16 +35,17 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-#CORS_ALLOWED_ORIGINS = [
+# CORS_ALLOWED_ORIGINS = [
 #    "http://localhost:8000",         # для Flutter Web в отладке
 #    "http://10.0.2.2:8000",          # Android-эмулятор
 #    "http://192.168.1.42:3000",      # если Flutter или JS запущен на телефоне
 #    "https://your-frontend-app.com", # твой продакшн-домен
-#]
+# ]
 
 CORS_ALLOW_HEADERS = [
     'accept',
@@ -132,3 +135,18 @@ STATICFILES_DIRS = [
 ]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': '272622672076-6bbi7ekh8q25a5ng0ucolovouhbf2n91.apps.googleusercontent.com',
+            'secret': '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',
+        },
+        'SCOPE': ['profile', 'email', ],
+        'AUTH_PARAMS': {'access_type': 'online'},
+        'METHOD': 'oauth2',
+        'VERIFIED_EMAIL': True,
+    }
+}
+
+SOCIALACCOUNT_LOGIN_ON_GET = True
