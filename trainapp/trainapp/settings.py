@@ -1,5 +1,5 @@
 from pathlib import Path
-
+from django.conf.global_settings import LOGIN_REDIRECT_URL
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-0!ngn82-l3-z319w2du+7f%r&t=2$gn#w6ggd=@xcxlj%pk(=b'
@@ -18,8 +18,8 @@ INSTALLED_APPS = [
     # 'django.contrib.sites',
     'fitapp.apps.FitappConfig',
     'corsheaders',
-    # 'rest_framework',
-    # 'rest_framework.authtoken',
+    'rest_framework',
+    'rest_framework.authtoken',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
@@ -142,11 +142,13 @@ SOCIALACCOUNT_PROVIDERS = {
             'client_id': '272622672076-6bbi7ekh8q25a5ng0ucolovouhbf2n91.apps.googleusercontent.com',
             'secret': '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',
         },
-        'SCOPE': ['profile', 'email', ],
-        'AUTH_PARAMS': {'access_type': 'online'},
-        'METHOD': 'oauth2',
-        'VERIFIED_EMAIL': True,
+        # 'SCOPE': ['profile', 'email', ],
+        # 'AUTH_PARAMS': {'access_type': 'online'},
+        # 'METHOD': 'oauth2',
+        # 'VERIFIED_EMAIL': True,
     }
 }
 
 SOCIALACCOUNT_LOGIN_ON_GET = True
+
+# LOGIN_REDIRECT_URL='login'
