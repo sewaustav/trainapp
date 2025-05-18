@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from django.conf.global_settings import LOGIN_REDIRECT_URL, AUTHENTICATION_BACKENDS
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-0!ngn82-l3-z319w2du+7f%r&t=2$gn#w6ggd=@xcxlj%pk(=b'
@@ -8,6 +10,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SITE_ID = 1
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -15,14 +19,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'django.contrib.sites',
+    'django.contrib.sites',
     'fitapp.apps.FitappConfig',
     'corsheaders',
-    # 'rest_framework',
-    # 'rest_framework.authtoken',
+    'rest_framework',
+    'rest_framework.authtoken',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    
 ]
 
 MIDDLEWARE = [
@@ -142,11 +149,19 @@ SOCIALACCOUNT_PROVIDERS = {
             'client_id': '272622672076-6bbi7ekh8q25a5ng0ucolovouhbf2n91.apps.googleusercontent.com',
             'secret': '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',
         },
-        'SCOPE': ['profile', 'email', ],
+        'SCOPE': ['profile',
+                  'email'
+                  ],
         'AUTH_PARAMS': {'access_type': 'online'},
         'METHOD': 'oauth2',
-        'VERIFIED_EMAIL': True,
+        # 'VERIFIED_EMAIL': True,
     }
 }
 
 SOCIALACCOUNT_LOGIN_ON_GET = True
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend"
+)

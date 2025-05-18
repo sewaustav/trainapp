@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect
 from .forms import WorkoutForm, WorkoutExerciseForm
 from .models import *
 from django.views.generic import *
+from django.contrib.auth import logout
+from django.shortcuts import redirect
 
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
@@ -43,13 +45,14 @@ def constructor(request):
                     )
             return redirect('mainpage')
     else:
-            workout_form = WorkoutForm()
+        workout_form = WorkoutForm()
     data = {'form': WorkoutForm(),
             'workout-exercise-form': WorkoutExerciseForm(),
             'exercises': Exercise.objects.all()
             }
 
     return render(request, 'fitapp/constructor.html', data)
+
 
 def WorkoutFunc(request, program_name):
     form = WorkoutForm()
@@ -82,18 +85,19 @@ def WorkoutFunc(request, program_name):
 
         return redirect('mainpage')
 
-
     data = {
-        'form':form,
+        'form': form,
         'exercise': exercises,
     }
 
     return render(request, 'fitapp/training-single.html', data)
 
+
 class ProgramList(ListView):
     model = Dprogram
     context_object_name = 'programs'
     template_name = 'fitapp/program-list.html'
+
 
 def DetailProgram(request, program_name):
     program = Dprogram.objects.get(name=program_name)
@@ -109,29 +113,33 @@ def DetailProgram(request, program_name):
 
 # api
 @api_view(['DELETE'])
-@permission_classes([AllowAny]) # временная фича пока не завезут регистрацию
+@permission_classes([AllowAny])  # временная фича пока не завезут регистрацию
 def delete_program_by_name(request, name):
     try:
-        program = Dprogram.objects.get(name=name)  
+        program = Dprogram.objects.get(name=name)
         program.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     except Dprogram.DoesNotExist:
         return Response({"error": "Программа не найдена"}, status=status.HTTP_404_NOT_FOUND)
+
 
 class FitapplistViewSet(viewsets.ModelViewSet):
     queryset = Exercise.objects.all()
     serializer_class = ExerciseSerializer
     permission_classes = [IsAuthenticated]
 
+
 class WorkoutlistViewSet(viewsets.ModelViewSet):
     queryset = Workout.objects.all()
     serializer_class = WorkoutSerializer
     permission_classes = [IsAuthenticated]
 
+
 class WorkoutExerciselistViewSet(viewsets.ModelViewSet):
     queryset = WorkoutExercise.objects.all()
     serializer_class = WorkoutExerciseSerializer
     permission_classes = [IsAuthenticated]
+
 
 class DprogramlistViewSet(viewsets.ModelViewSet):
     queryset = Dprogram.objects.all()
@@ -156,3 +164,7 @@ class WorkoutResultSetlistViewSet(viewsets.ModelViewSet):
     serializer_class = WorkoutResultSetSerializer
     permission_classes = [IsAuthenticated]
 
+
+def logout_view(request):
+    logout(request)
+    return redirect("/")

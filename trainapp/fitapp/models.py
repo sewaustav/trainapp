@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import *
 from django.contrib.auth.models import User
+from django.utils.timezone import now
 
 
 # при изменении дефолтной модели User обязательно добавить поля : рост - float; вес - float; жим, становая, присед, бицепс - float
@@ -24,7 +25,7 @@ class Exercise(models.Model):
 class Workout(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="workouts")
     name = models.CharField(max_length=100, null=True)
-    date = models.DateField(default=datetime.now(), blank=True)
+    date = models.DateField(default=now, blank=True)
     notes = models.TextField(blank=True, null=True)
 
     def __str__(self):
@@ -81,7 +82,7 @@ class ProgramExercise(models.Model):
 class WorkoutResult(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, null=True)
-    date = models.DateField(default=datetime.now(), blank=True)
+    date = models.DateField(default=now, blank=True)
     notes = models.TextField(blank=True, null=True)
 
     def __str__(self):
