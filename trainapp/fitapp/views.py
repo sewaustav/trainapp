@@ -109,7 +109,7 @@ def DetailProgram(request, program_name):
 
 # api
 @api_view(['DELETE'])
-@permission_classes([AllowAny]) # временная фича пока не завезут регистрацию
+@permission_classes([IsAuthenticated]) 
 def delete_program_by_name(request, name):
     try:
         program = Dprogram.objects.get(name=name)  
@@ -138,12 +138,16 @@ class DprogramlistViewSet(viewsets.ModelViewSet):
     serializer_class = DprogramSerializer
     permission_classes = [IsAuthenticated]
 
-
 class ProgramExerciselistViewSet(viewsets.ModelViewSet):
-    queryset = ProgramExercise.objects.all()
     serializer_class = ProgramExerciseSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        queryset = ProgramExercise.objects.all()
+        program_id = self.request.query_params.get('program')
+        if program_id:
+            queryset = queryset.filter(program_id=program_id)
+        return queryset
 
 class WorkoutResultlistViewSet(viewsets.ModelViewSet):
     queryset = WorkoutResult.objects.all()

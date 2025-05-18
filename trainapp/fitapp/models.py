@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 # при изменении дефолтной модели User обязательно добавить поля : рост - float; вес - float; жим, становая, присед, бицепс - float
 
 class Exercise(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     muscle_group = models.CharField(max_length=100)
     second_group = models.CharField(max_length=100, null=True, blank=True)
     third_group = models.CharField(max_length=100, null=True, blank=True)
@@ -51,7 +51,7 @@ class WorkoutExercise(models.Model):
 
 
 class Dprogram(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="program")
     description = models.TextField()
     type_of_program = models.CharField(max_length=100, blank=True, null=True)
