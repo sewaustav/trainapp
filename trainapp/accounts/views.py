@@ -1,3 +1,9 @@
+from datetime import timedelta
+
+import requests
+from django.shortcuts import redirect, render
+from django.utils import timezone
+from django.views import View
 from rest_framework import viewsets, status, generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.serializers import ModelSerializer
@@ -5,9 +11,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.conf import settings
-from .google_auth import verify_google_id_token
 
-from .google_auth import verify_google_id_token
+from google.oauth2 import id_token as google_id_token
+from google.auth.transport import requests as google_requests
+
+from .google_auth import verify_google_id_token, create_or_get_user_and_tokens
 from .serializers import *
 from .models import *
 
@@ -19,7 +27,7 @@ class GoogleLoginView(APIView):
         if not token:
             return Response({'error': 'id_token is required'}, status=400)
 
-        idinfo = verify_google_id_token(token, settings.GOOGLE_CLIENT_IDS)
+        idinfo = verify_google_id_token(token, settings.GOOGLE_CLIENT_ID)
         if not idinfo:
             return Response({'error': 'Invalid Google token'}, status=400)
 
@@ -32,24 +40,78 @@ class GoogleLoginView(APIView):
             user.save()
 
         refresh = RefreshToken.for_user(user)
+
+        JWTToken.objects.create(
+            user=user,
+            access_token=str(refresh.access_token),
+            refresh_token=str(refresh),
+            expires_at=timezone.now() + timedelta(hours=48)  # Время жизни access_token
+        )
+
         return Response({
             'access': str(refresh.access_token),
             'refresh': str(refresh),
         })
 
-class RegisterSerializer(ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['username', 'password', 'email']
-        extra_kwargs = {'password': {'write_only': True}}
+class GoogleAuthRedirectView(View):
+    def get(self, request):
+        google_client_id = settings.GOOGLE_CLIENT_ID
+        redirect_uri = request.build_absolute_uri('/accounts/api/google-auth/callback/')
+        scope = "openid email profile"
 
-    def create(self, validated_data):
-        user = User.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data.get('email'),
-            password=validated_data['password']
+        auth_url = (
+            "https://accounts.google.com/o/oauth2/v2/auth"
+            f"?client_id={google_client_id}"
+            f"&redirect_uri={redirect_uri}"
+            f"&response_type=code"
+            f"&scope={scope}"
         )
-        return user
+        return redirect(auth_url)
+
+class GoogleAuthCallbackView(View):
+    def get(self, request):
+        code = request.GET.get("code")
+        if not code:
+            return render(request, "accounts/auth_error.html", {"error": "No code provided."})
+
+        token_url = "https://oauth2.googleapis.com/token"
+        redirect_uri = request.build_absolute_uri('/accounts/api/google-auth/callback/')
+
+        data = {
+            "code": code,
+            "client_id": settings.GOOGLE_CLIENT_ID,
+            "client_secret": settings.GOOGLE_CLIENT_SECRET,
+            "redirect_uri": redirect_uri,
+            "grant_type": "authorization_code",
+        }
+
+        token_response = requests.post(token_url, data=data)
+        token_data = token_response.json()
+
+        id_token = token_data.get("id_token")
+        if not id_token:
+            return render(request, "accounts/auth_error.html", {"error": "Failed to get ID token"})
+
+
+
+        try:
+            idinfo = google_id_token.verify_oauth2_token(
+                id_token, google_requests.Request(), settings.GOOGLE_CLIENT_ID
+            )
+        except ValueError as e:
+            return render(request, "accounts/auth_error.html", {"error": str(e)})
+
+        email = idinfo.get('email')
+        name = idinfo.get('name')
+
+        auth_data = create_or_get_user_and_tokens(
+            email=idinfo.get('email'),
+            name=idinfo.get('name')
+        )
+
+        # Теперь можно редиректнуть на Flutter Web с токенами
+        frontend_redirect = f"{settings.FLUTTER_WEB_REDIRECT_URL}?access={str(auth_data['access'])}&refresh={str(auth_data['refresh'])}"
+        return redirect(frontend_redirect)
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()

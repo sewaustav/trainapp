@@ -3,11 +3,13 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-from .views import RegisterView, GoogleLoginView
+from .views import RegisterView, GoogleLoginView, GoogleAuthRedirectView, GoogleAuthCallbackView
 
 urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/register/', RegisterView.as_view(), name='auth_register'),
     path('api/google-login/', GoogleLoginView.as_view(), name='google-login'),
+    path("api/google-auth/", GoogleAuthRedirectView.as_view(), name="google-auth-start"),
+    path("api/google-auth/callback/", GoogleAuthCallbackView.as_view(), name="google-auth-callback"),
 ]
