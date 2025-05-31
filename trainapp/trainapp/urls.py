@@ -8,5 +8,5 @@ urlpatterns = [
                   path('admin/', admin.site.urls),
                   path('', include('fitapp.urls')),
                   path('api/', include('fitapp.api_urls')),
-                  path('accounts/', include('allauth.urls')),
+                  path('accounts/', include('accounts.urls')),
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

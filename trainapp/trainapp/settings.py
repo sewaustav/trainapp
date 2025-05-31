@@ -1,8 +1,14 @@
 from pathlib import Path
 from django.conf.global_settings import LOGIN_REDIRECT_URL
+from datetime import timedelta
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-0!ngn82-l3-z319w2du+7f%r&t=2$gn#w6ggd=@xcxlj%pk(=b'
+SECRET_KEY = os.getenv('SECRET_TOKEN')
 
 DEBUG = True
 
@@ -17,9 +23,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 'django.contrib.sites',
     'fitapp.apps.FitappConfig',
+    'accounts.apps.AccountsConfig',
     'corsheaders',
     'rest_framework',
-    'rest_framework.authtoken',
+    'rest_framework_simplejwt',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
@@ -86,9 +93,9 @@ TEMPLATES = [
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
@@ -118,6 +125,24 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=43200),  # например, 30 минут
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=60),     # например, 7 дней
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+}
+
+GOOGLE_IOS_ID = os.getenv('GOOGLE_IOS_ID')
+GOOGLE_ANDROID_ID = os.getenv('GOOGLE_ANDROID_ID')
+GOOGLE_WEB_ID = os.getenv('GOOGLE_WEB_ID')
+
+GOOGLE_CLIENT_IDS = [
+    GOOGLE_ANDROID_ID,
+    GOOGLE_IOS_ID,
+    GOOGLE_WEB_ID,
+]
+
 
 LANGUAGE_CODE = 'ru'
 

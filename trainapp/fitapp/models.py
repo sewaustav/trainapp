@@ -1,9 +1,8 @@
 from django.db import models
 from datetime import *
 from django.contrib.auth.models import User
+from django.db.models import CharField
 
-
-# при изменении дефолтной модели User обязательно добавить поля : рост - float; вес - float; жим, становая, присед, бицепс - float
 
 class Exercise(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -51,7 +50,7 @@ class WorkoutExercise(models.Model):
 
 
 class Dprogram(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="program")
     description = models.TextField()
     type_of_program = models.CharField(max_length=100, blank=True, null=True)
@@ -79,13 +78,13 @@ class ProgramExercise(models.Model):
         verbose_name_plural = "ProgramExercise"
 
 class WorkoutResult(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=100, null=True)
-    date = models.DateField(default=datetime.now(), blank=True)
+    date = models.DateTimeField(default=datetime.now(), blank=True)
     notes = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.date}"
+        return f'{self.user.username} - {self.name}'
 
     class Meta:
         verbose_name = "WorkoutResult"
@@ -99,7 +98,7 @@ class WorkoutResultSet(models.Model):
     weight = models.FloatField()
 
     def __str__(self):
-        return f"{self.exercise.name} on {self.workout.date}"
+        return f"{self.exercise.name} - {self.workout.name}"
 
     class Meta:
         verbose_name = "WorkoutResultSet"

@@ -15,6 +15,6 @@ router.register(r'workout_result_set', WorkoutResultSetlistViewSet, basename='wo
 
 urlpatterns = [
     path('api/', include(router.urls)),
-    path('api/token/', obtain_auth_token, name='api_token_auth'),
+    # path('api/token/', obtain_auth_token, name='api_token_auth'),
     path('api/programs/delete/<str:name>', delete_program_by_name, name='delete-pr'),
 ]
