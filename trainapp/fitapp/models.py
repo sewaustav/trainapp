@@ -5,6 +5,7 @@ from django.db.models import CharField
 
 
 class Exercise(models.Model):
+    # add equipment
     name = models.CharField(max_length=100, unique=True)
     muscle_group = models.CharField(max_length=100)
     second_group = models.CharField(max_length=100, null=True, blank=True)

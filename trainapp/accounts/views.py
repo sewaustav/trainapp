@@ -1,23 +1,18 @@
-from datetime import timedelta
-
 import requests
 from django.shortcuts import redirect, render
-from django.utils import timezone
 from django.views import View
-from rest_framework import viewsets, status, generics
+from google.auth.transport import requests as google_requests
+from google.oauth2 import id_token as google_id_token
+from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.serializers import ModelSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.conf import settings
-
-from google.oauth2 import id_token as google_id_token
-from google.auth.transport import requests as google_requests
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .google_auth import verify_google_id_token, create_or_get_user_and_tokens
-from .serializers import *
 from .models import *
+from .serializers import *
 
 
 # accounts api
@@ -113,10 +108,25 @@ class GoogleAuthCallbackView(View):
         frontend_redirect = f"{settings.FLUTTER_WEB_REDIRECT_URL}?access={str(auth_data['access'])}&refresh={str(auth_data['refresh'])}"
         return redirect(frontend_redirect)
 
+
+
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = SaveTokenSerializer
+
+
+class ViewProfileSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = ViewProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return User.objects.filter(id=user.id)
 
 
 class UserInfoSet(viewsets.ModelViewSet):
