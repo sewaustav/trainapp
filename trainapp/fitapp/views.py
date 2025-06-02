@@ -58,8 +58,7 @@ class ProgramExerciselistViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(program_id=program_id)
         return queryset
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+
 
 
 class WorkoutResultlistViewSet(viewsets.ModelViewSet):

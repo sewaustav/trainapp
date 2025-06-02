@@ -19,7 +19,7 @@ class WorkoutExerciseSerializer(serializers.ModelSerializer):
 class DprogramSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dprogram
-        fields = '__all__'
+        fields = ['id', 'name', 'description', 'type_of_program']
 
 class ProgramExerciseSerializer(serializers.ModelSerializer):
     class Meta:
