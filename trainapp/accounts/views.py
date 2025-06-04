@@ -139,9 +139,10 @@ class GoogleAuthCallbackView(View):
 
         UserAuthToken.objects.create(user=idinfo.get('name'), hash_token=TOKEN)
         # добавить deep link
+        # return redirect(f'https://yourfrontend.com/#/auth-callback?token={TOKEN}')
 
-        frontend_redirect = f"{settings.FLUTTER_WEB_REDIRECT_URL}?access={str(auth_data['access'])}&refresh={str(auth_data['refresh'])}"
-        return redirect(frontend_redirect)
+        # frontend_redirect = f"{settings.FLUTTER_WEB_REDIRECT_URL}?access={str(auth_data['access'])}&refresh={str(auth_data['refresh'])}"
+        # return redirect(frontend_redirect)
 
 
 
