@@ -1,4 +1,15 @@
+import base64
+import hmac
+import json
+
 import requests
+import hashlib
+from uuid import uuid4
+import os
+
+from django.db.models.functions import datetime
+from dotenv import load_dotenv
+
 from django.shortcuts import redirect, render
 from django.views import View
 from google.auth.transport import requests as google_requests
@@ -13,6 +24,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .google_auth import verify_google_id_token, create_or_get_user_and_tokens
 from .models import *
 from .serializers import *
+
+load_dotenv()
 
 
 # accounts api
@@ -104,7 +117,29 @@ class GoogleAuthCallbackView(View):
             name=idinfo.get('name')
         )
 
-        # Теперь можно редиректнуть на Flutter Web с токенами
+        payload = {
+            'data': idinfo.get('name'),
+            'exp': timezone.now() + timedelta(minutes=15),
+            'jti': str(uuid4())
+        }
+
+        TEMP_TOKEN_SECRET = os.getenv('SECRET_AUTH_KEY')
+
+        payload_json = json.dumps(payload, separators=(',', ':')).encode('utf-8')
+        payload_b64 = base64.urlsafe_b64encode(payload_json).decode('utf-8').rstrip('=')
+
+        signature = hmac.new(
+            TEMP_TOKEN_SECRET.encode('utf-8'),
+            payload_b64.encode('utf-8'),
+            hashlib.sha256
+        ).digest()
+        signature_b64 = base64.urlsafe_b64encode(signature).decode('utf-8').rstrip('=')
+
+        TOKEN  = f'{payload_b64}.{signature_b64}'
+
+        UserAuthToken.objects.create(user=idinfo.get('name'), hash_token=TOKEN)
+        # добавить deep link
+
         frontend_redirect = f"{settings.FLUTTER_WEB_REDIRECT_URL}?access={str(auth_data['access'])}&refresh={str(auth_data['refresh'])}"
         return redirect(frontend_redirect)
 

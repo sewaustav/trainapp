@@ -31,8 +31,16 @@ class UserInfo(models.Model):
 
 class UserGoals(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    goal = CharField(max_length=100)
+    goal = models.CharField(max_length=100)
     final_day_of_goal = models.DateField()
 
     def __str__(self):
         return f'Users {self.user} goal: {self.goal} - {self.final_day_of_goal}'
+
+class UserAuthToken(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    hash_token = models.CharField(max_length=150)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user.name} - auth hash token'
