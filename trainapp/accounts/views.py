@@ -137,7 +137,7 @@ class GoogleAuthCallbackView(View):
 
         TOKEN  = f'{payload_b64}.{signature_b64}'
 
-        UserAuthToken.objects.create(user=idinfo.get('name'), hash_token=TOKEN)
+        # UserAuthToken.objects.create(user=idinfo.get('name'), hash_token=TOKEN)
         # добавить deep link
         # return redirect(f'https://yourfrontend.com/#/auth-callback?token={TOKEN}')
 

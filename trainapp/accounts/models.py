@@ -20,7 +20,7 @@ class JWTToken(models.Model):
 
 
 class UserInfo(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     weight = models.FloatField(null=True, blank=True)
     height = models.FloatField(null=True, blank=True)
     week_streak = models.IntegerField(null=True, default=0)
@@ -30,7 +30,7 @@ class UserInfo(models.Model):
 
 
 class UserGoals(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     goal = models.CharField(max_length=100)
     final_day_of_goal = models.DateField()
 

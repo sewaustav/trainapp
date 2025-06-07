@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
 from rest_framework import viewsets, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, BasePermission, SAFE_METHODS
 from .serializers import *
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -23,10 +23,17 @@ def delete_program_by_name(request, name):
         return Response({"error": "Программа не найдена"}, status=status.HTTP_404_NOT_FOUND)
 
 
+class IsAdminOrReadOnly(BasePermission):
+    def has_permission(self, request, view):
+        if request.method in SAFE_METHODS:
+            return True
+        return request.user and request.user.is_authenticated and request.user.is_staff
+
+
 class FitapplistViewSet(viewsets.ModelViewSet):
     queryset = Exercise.objects.all()
     serializer_class = ExerciseSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminOrReadOnly]
 
 class WorkoutlistViewSet(viewsets.ModelViewSet):
     queryset = Workout.objects.all()
