@@ -166,17 +166,21 @@ class ViewProfileSet(viewsets.ReadOnlyModelViewSet):
 
 
 class UserInfoSet(viewsets.ModelViewSet):
-    queryset = UserInfo.objects.all()
     serializer_class = UserInfoSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return UserInfo.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
 class UserGoalsSet(viewsets.ModelViewSet):
-    queryset = UserGoals.objects.all()
     serializer_class = UserGoalsSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return UserGoals.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
