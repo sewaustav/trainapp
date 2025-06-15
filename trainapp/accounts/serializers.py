@@ -2,8 +2,10 @@ from datetime import timedelta
 
 from django.utils import timezone
 from rest_framework import serializers
+from rest_framework_simplejwt.tokens import RefreshToken
+
 from .models import *
-from rest_framework_simplejwt.serializers import TokenObtainSerializer, TokenObtainPairSerializer
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 
 
 class UserInfoSerializer(serializers.ModelSerializer):
@@ -23,7 +25,22 @@ class SaveTokenSerializer(TokenObtainPairSerializer):
             user=self.user,
             access_token=data['access'],
             refresh_token=data['refresh'],
-            expires_at=timezone.now() + timedelta(hours=24 * 7)
+            expires_at=timezone.now() + timedelta(days=30)
+        )
+        return data
+
+class RefreshTokenSerializer(TokenRefreshSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        refresh = RefreshToken(attrs['refresh'])
+
+        user_id = refresh['user_id']  # или 'user_id', в зависимости от настроек
+        user = User.objects.get(id=user_id)
+        JWTToken.objects.create(
+            user=user,
+            access_token=data['access'],
+            refresh_token=attrs['refresh'],
+            expires_at=timezone.now() + timedelta(days=30),
         )
         return data
 

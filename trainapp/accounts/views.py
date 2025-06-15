@@ -19,7 +19,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from .google_auth import verify_google_id_token, create_or_get_user_and_tokens
 from .models import *
@@ -154,6 +154,9 @@ class RegisterView(generics.CreateAPIView):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = SaveTokenSerializer
+
+class CustomTokenRefreshView(TokenRefreshView):
+    serializer_class = RefreshTokenSerializer
 
 
 class ViewProfileSet(viewsets.ReadOnlyModelViewSet):

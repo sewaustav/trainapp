@@ -4,8 +4,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-from .views import RegisterView, GoogleLoginView, GoogleAuthRedirectView, GoogleAuthCallbackView, ViewProfileSet, \
-    CustomTokenObtainPairView, UserGoalsSet, UserInfoSet
+from .views import *
 
 router = DefaultRouter()
 router.register(r'profile', ViewProfileSet, basename='profile')
@@ -15,7 +14,7 @@ router.register(r'user-info', UserInfoSet, basename='exta-info')
 urlpatterns = [
     path('api/', include(router.urls)),
     path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
     path('api/register/', RegisterView.as_view(), name='auth_register'),
     path('api/google-login/', GoogleLoginView.as_view(), name='google-login'),
     path("api/google-auth/", GoogleAuthRedirectView.as_view(), name="google-auth-start"),
