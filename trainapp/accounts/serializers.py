@@ -36,12 +36,20 @@ class RefreshTokenSerializer(TokenRefreshSerializer):
 
         user_id = refresh['user_id']  # или 'user_id', в зависимости от настроек
         user = User.objects.get(id=user_id)
-        JWTToken.objects.create(
-            user=user,
-            access_token=data['access'],
-            refresh_token=attrs['refresh'],
-            expires_at=timezone.now() + timedelta(days=30),
-        )
+        token_obj = JWTToken.objects.filter(user=user).order_by('-id').first()
+        if token_obj:
+            token_obj.access_token = data['access']
+            token_obj.refresh_token = attrs['refresh']
+            token_obj.expires_at = timezone.now() + timedelta(days=30)
+            token_obj.save()
+        else:
+            JWTToken.objects.create(
+                user=user,
+                access_token=data['access'],
+                refresh_token=attrs['refresh'],
+                expires_at=timezone.now() + timedelta(days=30),
+            )
+
         return data
 
 class RegisterSerializer(serializers.ModelSerializer):
