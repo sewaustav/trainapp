@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from narwhals import Object
 
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated, BasePermission, SAFE_METHODS
@@ -12,17 +13,6 @@ def mainpage(request):
 
 
 # api
-@api_view(['DELETE'])
-@permission_classes([IsAuthenticated]) # временная фича пока не завезут регистрацию
-def delete_program_by_name(request, name):
-    try:
-        program = Dprogram.objects.get(name=name)
-        program.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    except Dprogram.DoesNotExist:
-        return Response({"error": "Программа не найдена"}, status=status.HTTP_404_NOT_FOUND)
-
-
 class IsAdminOrReadOnly(BasePermission):
     def has_permission(self, request, view):
         if request.method in SAFE_METHODS:
@@ -87,5 +77,25 @@ class WorkoutResultSetlistViewSet(viewsets.ModelViewSet):
         if workout_id:
             queryset = queryset.filter(workout_id=workout_id)
         return queryset
+
+
+class FutureWorkoutViewSet(viewsets.ModelViewSet):
+    serializer_class = FutureWorkoutSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_queryset(self):
+        current_datetime = datetime.now()
+        return FutureWorkout.objects.filter(user=self.request.user, date__gt=current_datetime).order_by('date')
+
+class FutureWorkoutExerciseViewSet(viewsets.ModelViewSet):
+    serializer_class = FutureWorkoutExerciseSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        workout_id = self.request.query_params.get('workout')
+        return FutureWorkoutExercise.objects.filter(workout=workout_id)
 
 
