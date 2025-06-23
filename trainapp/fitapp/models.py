@@ -2,6 +2,7 @@ from django.db import models
 from datetime import *
 from django.contrib.auth.models import User
 from django.db.models import CharField
+from kivy.tools.pep8checker.pep8 import blank_lines
 
 
 class Exercise(models.Model):
@@ -69,7 +70,7 @@ class ProgramExercise(models.Model):
     exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE)
     sets = models.PositiveIntegerField()
     reps = models.PositiveIntegerField()
-    weight = models.FloatField()
+    weight = models.FloatField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.exercise.name} on {self.program.name}"
@@ -83,6 +84,8 @@ class WorkoutResult(models.Model):
     name = models.CharField(max_length=100, null=True)
     date = models.DateTimeField(default=datetime.now(), blank=True)
     notes = models.TextField(blank=True, null=True)
+    duration = models.CharField(max_length=100, blank=True, null=True)
+    tonnage = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return f'{self.user.username} - {self.name}'
@@ -105,3 +108,29 @@ class WorkoutResultSet(models.Model):
         verbose_name = "WorkoutResultSet"
         verbose_name_plural = "WorkoutResultSet"
 
+class FutureWorkout(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=100, null=True)
+    date = models.DateTimeField(default=datetime.now(), blank=True)
+    notes = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.user.username} - {self.name} - {self.date}'
+
+    class Meta:
+        verbose_name = "FutureTraining"
+        verbose_name_plural = "FutureTraining"
+
+class FutureWorkoutExercise(models.Model):
+    workout = models.ForeignKey(FutureWorkout, on_delete=models.CASCADE)
+    exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE)
+    sets = models.IntegerField()
+    reps = models.IntegerField()
+    weight = models.FloatField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.exercise.name} - {self.workout.name}"
+
+    class Meta:
+        verbose_name = "FutureTrainingExercises"
+        verbose_name_plural = "FutureTrainingExercises"
