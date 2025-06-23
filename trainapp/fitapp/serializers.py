@@ -35,3 +35,13 @@ class WorkoutResultSetSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkoutResultSet
         fields = '__all__'
+
+class FutureWorkoutSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FutureWorkout
+        fields = '__all__'
+
+class FutureWorkoutExerciseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FutureWorkoutExercise
+        field = '__all__'
