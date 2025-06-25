@@ -44,4 +44,4 @@ class FutureWorkoutSerializer(serializers.ModelSerializer):
 class FutureWorkoutExerciseSerializer(serializers.ModelSerializer):
     class Meta:
         model = FutureWorkoutExercise
-        field = '__all__'
+        fields = '__all__'

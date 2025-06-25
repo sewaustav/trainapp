@@ -90,12 +90,31 @@ class FutureWorkoutViewSet(viewsets.ModelViewSet):
         current_datetime = datetime.now()
         return FutureWorkout.objects.filter(user=self.request.user, date__gt=current_datetime).order_by('date')
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_next_training(request):
+    try:
+        next_workout = (FutureWorkout.objects.filter(user=request.user).order_by('date').first())
+        if next_workout:
+            serializer = FutureWorkoutSerializer(next_workout)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({'details': 'You have not any training in your plan'}, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
 class FutureWorkoutExerciseViewSet(viewsets.ModelViewSet):
     serializer_class = FutureWorkoutExerciseSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        queryset = FutureWorkoutExercise.objects.all()
         workout_id = self.request.query_params.get('workout')
-        return FutureWorkoutExercise.objects.filter(workout=workout_id)
+        if workout_id:
+            queryset = queryset.filter(workout_id=workout_id)
+        return queryset
+
 
 

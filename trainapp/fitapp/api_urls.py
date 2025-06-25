@@ -11,8 +11,9 @@ router.register(r'program_exercise', ProgramExerciselistViewSet, basename='progr
 router.register(r'workout_result', WorkoutResultlistViewSet, basename='workout_result')
 router.register(r'workout_result_set', WorkoutResultSetlistViewSet, basename='workout_result_set')
 router.register(r'schedule', FutureWorkoutViewSet, basename='schedule')
-router.register(r'schedule/exercises', FutureWorkoutExerciseViewSet, basename='schedule_exercises')
+router.register(r'schedule_exercises', FutureWorkoutExerciseViewSet, basename='schedule_exercises')
 
 urlpatterns = [
     path('api/', include(router.urls)),
+    path('api/next_training/', get_next_training, name='next'),
 ]
