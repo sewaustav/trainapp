@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from narwhals import Object
+
 
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated, BasePermission, SAFE_METHODS

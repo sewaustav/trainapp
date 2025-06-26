@@ -2,7 +2,7 @@ from django.db import models
 from datetime import *
 from django.contrib.auth.models import User
 from django.db.models import CharField
-from kivy.tools.pep8checker.pep8 import blank_lines
+
 
 
 class Exercise(models.Model):
