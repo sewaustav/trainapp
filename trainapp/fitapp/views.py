@@ -94,7 +94,8 @@ class FutureWorkoutViewSet(viewsets.ModelViewSet):
 @permission_classes([IsAuthenticated])
 def get_next_training(request):
     try:
-        next_workout = (FutureWorkout.objects.filter(user=request.user).order_by('date').first())
+        current_datetime = datetime.now()
+        next_workout = (FutureWorkout.objects.filter(user=request.user, date__gt=current_datetime).order_by('date').first())
         if next_workout:
             serializer = FutureWorkoutSerializer(next_workout)
             return Response(serializer.data, status=status.HTTP_200_OK)
