@@ -33,6 +33,7 @@ class UserGoals(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     goal = models.CharField(max_length=100)
     final_day_of_goal = models.DateField()
+    status = models.BooleanField(blank=True, null=True, default=False)
 
     def __str__(self):
         return f'Users {self.user} goal: {self.goal} - {self.final_day_of_goal}'

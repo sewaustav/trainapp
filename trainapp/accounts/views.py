@@ -183,7 +183,7 @@ class UserGoalsSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return UserGoals.objects.filter(user=self.request.user)
+        return UserGoals.objects.filter(user=self.request.user, status=False)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
