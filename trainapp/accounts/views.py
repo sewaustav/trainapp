@@ -1,6 +1,7 @@
 import base64
 import hmac
 import json
+import urllib
 
 import requests
 import hashlib
@@ -8,6 +9,7 @@ from uuid import uuid4
 import os
 
 from django.db.models.functions import datetime
+from django.http import HttpResponseRedirect
 from dotenv import load_dotenv
 
 from django.shortcuts import redirect, render
@@ -79,6 +81,7 @@ class GoogleAuthRedirectView(View):
 class GoogleAuthCallbackView(View):
     def get(self, request):
         code = request.GET.get("code")
+        client_type = request.GET.get("client_type", "web")
         if not code:
             return render(request, "accounts/auth_error.html", {"error": "No code provided."})
 
@@ -100,8 +103,6 @@ class GoogleAuthCallbackView(View):
         if not id_token:
             return render(request, "accounts/auth_error.html", {"error": "Failed to get ID token"})
 
-
-
         try:
             idinfo = google_id_token.verify_oauth2_token(
                 id_token, google_requests.Request(), settings.GOOGLE_CLIENT_ID
@@ -115,35 +116,25 @@ class GoogleAuthCallbackView(View):
         auth_data = create_or_get_user_and_tokens(
             email=idinfo.get('email'),
             name=idinfo.get('name')
-        )
-
-        payload = {
-            'data': idinfo.get('name'),
-            'exp': timezone.now() + timedelta(minutes=15),
-            'jti': str(uuid4())
+        )# Формируем параметры для редиректа
+        params = {
+            'access_token': auth_data['access'],
+            'refresh_token': auth_data['refresh'],
+            'status': 'success'
         }
 
-        TEMP_TOKEN_SECRET = os.getenv('SECRET_AUTH_KEY')
+        # Определяем URL для редиректа в зависимости от типа клиента
+        if client_type == "android":
+            redirect_url = f"yourapp://auth/callback"
+        elif client_type == "ios":
+            redirect_url = f"yourapp://auth/callback"
+        else:  # web
+            redirect_url = f"http://localhost:55555/#/google-auth/"  # или ваш веб URL
 
-        payload_json = json.dumps(payload, separators=(',', ':')).encode('utf-8')
-        payload_b64 = base64.urlsafe_b64encode(payload_json).decode('utf-8').rstrip('=')
+        # Добавляем параметры к URL
+        full_redirect_url = f"{redirect_url}?{urllib.parse.urlencode(params)}"
 
-        signature = hmac.new(
-            TEMP_TOKEN_SECRET.encode('utf-8'),
-            payload_b64.encode('utf-8'),
-            hashlib.sha256
-        ).digest()
-        signature_b64 = base64.urlsafe_b64encode(signature).decode('utf-8').rstrip('=')
-
-        TOKEN  = f'{payload_b64}.{signature_b64}'
-
-        # UserAuthToken.objects.create(user=idinfo.get('name'), hash_token=TOKEN)
-        # добавить deep link
-        # return redirect(f'https://yourfrontend.com/#/auth-callback?token={TOKEN}')
-
-        # frontend_redirect = f"{settings.FLUTTER_WEB_REDIRECT_URL}?access={str(auth_data['access'])}&refresh={str(auth_data['refresh'])}"
-        # return redirect(frontend_redirect)
-
+        return HttpResponseRedirect(full_redirect_url)
 
 
 class RegisterView(generics.CreateAPIView):
