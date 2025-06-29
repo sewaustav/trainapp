@@ -125,9 +125,9 @@ class GoogleAuthCallbackView(View):
 
         # Определяем URL для редиректа в зависимости от типа клиента
         if client_type == "android":
-            redirect_url = f"yourapp://auth/callback"
+            redirect_url = f"dotfit://auth/callback"
         elif client_type == "ios":
-            redirect_url = f"yourapp://auth/callback"
+            redirect_url = f"dotfit://auth/callback"
         else:  # web
             redirect_url = f"http://localhost:55555/#/google-auth/"  # или ваш веб URL
 
