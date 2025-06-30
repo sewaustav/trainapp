@@ -166,18 +166,7 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'APP': {
-            'client_id': '272622672076-6bbi7ekh8q25a5ng0ucolovouhbf2n91.apps.googleusercontent.com',
-            'secret': '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',
-        },
-        # 'SCOPE': ['profile', 'email', ],
-        # 'AUTH_PARAMS': {'access_type': 'online'},
-        # 'METHOD': 'oauth2',
-        # 'VERIFIED_EMAIL': True,
-    }
-}
+
 
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
