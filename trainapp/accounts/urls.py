@@ -10,6 +10,7 @@ router = DefaultRouter()
 router.register(r'profile', ViewProfileSet, basename='profile')
 router.register(r'user-goals', UserGoalsSet, basename='goals')
 router.register(r'user-info', UserInfoSet, basename='exta-info')
+router.register(r'authstatus', check_auth_status, basename='authstatus')
 
 urlpatterns = [
     path('api/', include(router.urls)),

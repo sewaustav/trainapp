@@ -4,12 +4,8 @@ import json
 import urllib
 
 import requests
-import hashlib
-from uuid import uuid4
-import os
-
 from django.db.models.functions import datetime
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from dotenv import load_dotenv
 
 from django.shortcuts import redirect, render
@@ -17,7 +13,8 @@ from django.views import View
 from google.auth.transport import requests as google_requests
 from google.oauth2 import id_token as google_id_token
 from rest_framework import viewsets, generics
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.decorators import permission_classes, api_view
+from rest_framework.permissions import IsAuthenticated, AllowAny, BasePermission, SAFE_METHODS
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -65,6 +62,8 @@ class GoogleLoginView(APIView):
 
 class GoogleAuthRedirectView(View):
     def get(self, request):
+        session_id = request.GET.get("session_id")
+        UserAuthToken.objects.create(session_id=session_id, status=False)
         google_client_id = settings.GOOGLE_CLIENT_ID
         redirect_uri = request.build_absolute_uri('/accounts/api/google-auth/callback/')
         scope = "openid email profile"
@@ -75,12 +74,16 @@ class GoogleAuthRedirectView(View):
             f"&redirect_uri={redirect_uri}"
             f"&response_type=code"
             f"&scope={scope}"
+            f"&session_id={session_id}"
         )
         return redirect(auth_url)
 
 class GoogleAuthCallbackView(View):
     def get(self, request):
         code = request.GET.get("code")
+        session_id = request.GET.get("session_id")
+        auth_model = UserAuthToken.objects.get(session_id=session_id)
+
         client_type = request.GET.get("client_type", "web")
         if not code:
             return render(request, "accounts/auth_error.html", {"error": "No code provided."})
@@ -116,25 +119,32 @@ class GoogleAuthCallbackView(View):
         auth_data = create_or_get_user_and_tokens(
             email=idinfo.get('email'),
             name=idinfo.get('name')
-        )# Формируем параметры для редиректа
+        )
+
+        auth_model.status = True
+        auth_model.user = name
+
         params = {
             'access_token': auth_data['access'],
             'refresh_token': auth_data['refresh'],
             'status': 'success'
         }
+        return HttpResponse(
+            """Success"""
+        )
 
         # Определяем URL для редиректа в зависимости от типа клиента
-        if client_type == "android":
-            redirect_url = f"dotfit://auth/callback"
-        elif client_type == "ios":
-            redirect_url = f"dotfit://auth/callback"
-        else:  # web
-            redirect_url = f"http://localhost:55555/#/google-auth/"  # или ваш веб URL
-
-        # Добавляем параметры к URL
-        full_redirect_url = f"{redirect_url}?{urllib.parse.urlencode(params)}"
-
-        return HttpResponseRedirect(full_redirect_url)
+        # if client_type == "android":
+        #     redirect_url = f"dotfit://auth/callback"
+        # elif client_type == "ios":
+        #     redirect_url = f"dotfit://auth/callback"
+        # else:
+        #     redirect_url = f"http://localhost:55555/#/google-auth/"  # или ваш веб URL
+        #
+        # # Добавляем параметры к URL
+        # full_redirect_url = f"{redirect_url}?{urllib.parse.urlencode(params)}"
+        #
+        # return HttpResponseRedirect(full_redirect_url)
 
 
 class RegisterView(generics.CreateAPIView):
@@ -179,3 +189,32 @@ class UserGoalsSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def check_auth_status(request):
+    session_id = request.GET.get("session_id")
+    if not session_id:
+        return Response({"status": False, "error": "Missing session_id"}, status=400)
+
+    try:
+        name = UserAuthToken.objects.get(session_id=session_id)
+        auth = JWTToken.objects.filter(user=name.user).order_by('-created_at').first()
+    except UserAuthToken.DoesNotExist:
+        return Response({"status": False, "error": "Invalid session_id"}, status=404)
+
+    if auth.is_expired():
+        auth.delete()
+        return Response({"status": False, "error": "Session expired"}, status=403)
+
+    if not auth.status:
+        return Response({"status": False})
+
+    # Возвращаем токены и удаляем запись
+    response = {
+        "status": True,
+        "access_token": auth.access_token,
+        "refresh_token": auth.refresh_token,
+    }
+    name.delete()
+    return Response(response)

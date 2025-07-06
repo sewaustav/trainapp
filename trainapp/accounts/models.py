@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import CharField
+from requests import session
 
 
 class JWTToken(models.Model):
@@ -39,9 +40,9 @@ class UserGoals(models.Model):
         return f'Users {self.user} goal: {self.goal} - {self.final_day_of_goal}'
 
 class UserAuthToken(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    hash_token = models.CharField(max_length=150)
-    created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    session_id = models.CharField(max_length=100)
+    status = models.BooleanField(default=False, blank=True)
 
     def __str__(self):
-        return f'{self.user.name} - auth hash token'
+        return f'{self.session_id} - {self.status}'
