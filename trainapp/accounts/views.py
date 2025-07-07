@@ -74,14 +74,14 @@ class GoogleAuthRedirectView(View):
             f"&redirect_uri={redirect_uri}"
             f"&response_type=code"
             f"&scope={scope}"
-            f"&session_id={session_id}"
+            f"&state={session_id}"
         )
         return redirect(auth_url)
 
 class GoogleAuthCallbackView(View):
     def get(self, request):
         code = request.GET.get("code")
-        session_id = request.GET.get("session_id")
+        session_id = request.GET.get("state")
         auth_model = UserAuthToken.objects.get(session_id=session_id)
 
         client_type = request.GET.get("client_type", "web")
@@ -120,9 +120,10 @@ class GoogleAuthCallbackView(View):
             email=idinfo.get('email'),
             name=idinfo.get('name')
         )
-
+        user, _ = User.objects.get_or_create(username=email, defaults={"email": email})
         auth_model.status = True
-        auth_model.user = name
+        auth_model.user = user
+        auth_model.save()
 
         params = {
             'access_token': auth_data['access'],
@@ -133,18 +134,6 @@ class GoogleAuthCallbackView(View):
             """Success"""
         )
 
-        # Определяем URL для редиректа в зависимости от типа клиента
-        # if client_type == "android":
-        #     redirect_url = f"dotfit://auth/callback"
-        # elif client_type == "ios":
-        #     redirect_url = f"dotfit://auth/callback"
-        # else:
-        #     redirect_url = f"http://localhost:55555/#/google-auth/"  # или ваш веб URL
-        #
-        # # Добавляем параметры к URL
-        # full_redirect_url = f"{redirect_url}?{urllib.parse.urlencode(params)}"
-        #
-        # return HttpResponseRedirect(full_redirect_url)
 
 
 class RegisterView(generics.CreateAPIView):
@@ -203,12 +192,6 @@ def check_auth_status(request):
     except UserAuthToken.DoesNotExist:
         return Response({"status": False, "error": "Invalid session_id"}, status=404)
 
-    if auth.is_expired():
-        auth.delete()
-        return Response({"status": False, "error": "Session expired"}, status=403)
-
-    if not auth.status:
-        return Response({"status": False})
 
     # Возвращаем токены и удаляем запись
     response = {

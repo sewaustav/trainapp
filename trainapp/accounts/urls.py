@@ -10,7 +10,6 @@ router = DefaultRouter()
 router.register(r'profile', ViewProfileSet, basename='profile')
 router.register(r'user-goals', UserGoalsSet, basename='goals')
 router.register(r'user-info', UserInfoSet, basename='exta-info')
-router.register(r'authstatus', check_auth_status, basename='authstatus')
 
 urlpatterns = [
     path('api/', include(router.urls)),
@@ -20,4 +19,5 @@ urlpatterns = [
     path('api/google-login/', GoogleLoginView.as_view(), name='google-login'),
     path("api/google-auth/", GoogleAuthRedirectView.as_view(), name="google-auth-start"),
     path("api/google-auth/callback/", GoogleAuthCallbackView.as_view(), name="google-auth-callback"),
+    path('api/authstatus', check_auth_status, name='authstatus')
 ]
