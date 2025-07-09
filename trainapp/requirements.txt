@@ -1,5 +1,6 @@
 asgiref==3.9.0
 cachetools==5.5.2
+cryptography==45.0.5
 django==5.2.4
 django-allauth==65.9.0
 django-cors-headers==4.7.0

@@ -1,7 +1,7 @@
 {% extends 'fitapp/index.html' %}
 {% load static %}
 
-{% block title %}Главная{% endblock %}
+{% block title %}DotFit{% endblock %}
 
 {% block preloader %}
 <div id="preloder">
@@ -11,60 +11,68 @@
 
 {% block main %}
 
-        <section class="top-label top-label-main" style="background-image: url({% static 'fitapp/img/top-label.jpg' %});">
+        <section class="top-label top-label-main" 
+        style="background-image: url({% static 'fitapp/img/top-label.jpg' %});">
             <div class="container-label">
-                <h1>Главная</h1><br>
-                <a href="#" class="start-btn">Начать прямо сейчас</a>
+                <h1>DotFit</h1><br>
+                <a href="#" class="start-btn">Let's train!</a>
             </div>
         </section>
         <section class="about-section">
             <div class="text-about">
-                <h3>Добро пожаловать в семью</h3><br>
-                <p id="big-p">Вы наткнулись на самое крутое приложение для персональных тренировок</p>
-                <p>Здесь вы сможете:
+                <h3>Welcome to our family</h3><br>
+                <p id="big-p">You've stumbled upon the coolest personal training app ever.</p>
+                <p>Here you can:
                     <ul>
-                        <li class="about-li">Составить план тренировки</li>
-                        <li class="about-li">Выбрать и заниматься по уже существующей программе</li>
-                        <li class="about-li">Составить персональное расписание</li>
-                        <li class="about-li">Найти полезные советы по питанию</li>
-                        <li class="about-li">Калькуляторы, советы от профессионалов и многое другое</li>
+                        <li class="about-li">Make your personal plan of training</li>
+                        <li class="about-li">Choose a ready-made program</li>
+                        <li class="about-li">Create a personal schedule</li>
+                        <li class="about-li">Track your results</li>
+                        <li class="about-li">Calculators and other special tools</li>
                     </ul>
                 </p>
             </div>
             <img src="{% static 'fitapp/img/about-main.jpg' %}">
         </section>
 
-        <section class="go-training">
-            <h2>Идем на тренировку</h2><br><br>
-            <div class="container-go"> 
-                <a href="program-list.html" class="s">
-                    <div class="img-cont" style="background-image: url({% static 'fitapp/img/program.jpg' %});">
-                        <div class="blur"></div>
-                        <h4>Готовая программа</h4>
-                    </div>
-                </a>
-                <a href="constructor.html" class="s">
-                    <div class="img-cont" style="background-image: url({% static 'fitapp/img/personal.jpg' %});">
-                        <div class="blur"></div>
-                        <h4>Создание персональной тренировки</h4>
-                    </div>
-                </a>
-                <a href="other.html" class="s">
-                    <div class="img-cont" style="background-image: url({% static 'fitapp/img/calc.jpg' %});">
-                        <div class="blur"></div>s
-                        <h4>Калькуляторы и полезная инфа</h4>
-                    </div>
-                </a>
-                <a href="calendar.html" class="s">
-                    <div class="img-cont" style="background-image: url({% static 'fitapp/img/calendar.jpg' %});">
-                        <div class="blur"></div>
-                        <h4>Календарь тренировок</h4>
-                    </div>
-                </a>
+        <section class="download-section">
+            <div class="download-container">
+                <h2 class="download-title">Скачайте наше мобильное приложение</h2>
+                <p class="download-description">
+                    Установите приложение для более удобного доступа ко всем функциям сервиса 
+                    и получения персональных рекомендаций.
+                </p>
+                
+                <div class="download-buttons">
+                    <a href="#" class="download-btn apk-btn">
+    <svg class="btn-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve" fill="currentColor">
+        <g id="b75708d097f2188dff6617b0f00f7c43">
+            <path display="inline" d="M120.606,169h270.788v220.663c0,13.109-10.628,23.737-23.721,23.737h-27.123v67.203 c0,17.066-13.612,30.897-30.415,30.897c-16.846,0-30.438-13.831-30.438-30.897v-67.203h-47.371v67.203 c0,17.066-13.639,30.897-30.441,30.897c-16.799,0-30.437-13.831-30.437-30.897v-67.203h-27.099 c-13.096,0-23.744-10.628-23.744-23.737V169z M67.541,167.199c-16.974,0-30.723,13.963-30.723,31.2v121.937 c0,17.217,13.749,31.204,30.723,31.204c16.977,0,30.723-13.987,30.723-31.204V198.399 C98.264,181.162,84.518,167.199,67.541,167.199z M391.395,146.764H120.606c3.342-38.578,28.367-71.776,64.392-90.998 l-25.746-37.804c-3.472-5.098-2.162-12.054,2.946-15.525c5.102-3.471,12.044-2.151,15.533,2.943l28.061,41.232 c15.558-5.38,32.446-8.469,50.208-8.469c17.783,0,34.672,3.089,50.229,8.476L334.29,5.395c3.446-5.108,10.41-6.428,15.512-2.957 c5.108,3.471,6.418,10.427,2.946,15.525l-25.725,37.804C363.047,74.977,388.055,108.175,391.395,146.764z M213.865,94.345 c0-8.273-6.699-14.983-14.969-14.983c-8.291,0-14.99,6.71-14.99,14.983c0,8.269,6.721,14.976,14.99,14.976 S213.865,102.614,213.865,94.345z M329.992,94.345c0-8.273-6.722-14.983-14.99-14.983c-8.291,0-14.97,6.71-14.97,14.983 c0,8.269,6.679,14.976,14.97,14.976C323.271,109.321,329.992,102.614,329.992,94.345z M444.48,167.156 c-16.956,0-30.744,13.984-30.744,31.222v121.98c0,17.238,13.788,31.226,30.744,31.226c16.978,0,30.701-13.987,30.701-31.226 v-121.98C475.182,181.14,461.458,167.156,444.48,167.156z"></path>
+        </g>
+    </svg>
+    Скачать APK (Android)
+</a>
+                    
+                    <!--<a href="" class="download-btn appstore-btn">
+                        <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.364 5.636a9 9 0 0 1 0 12.728m-12.728 0a9 9 0 0 1 0-12.728m12.728 0a9 9 0 0 0-12.728 0"/>
+                        </svg>
+                        App Store (iOS)
+                    </a>
+                    
+                    <a href="" class="download-btn googleplay-btn">
+                        <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M3 20h18M3 4h18m-9 8h9m-9-8v16"/>
+                        </svg>
+                        Google Play (Android)
+                    </a> -->
+                </div>
+                
+                <a href="/web-version" class="web-link">Продолжить в веб-версии</a>
             </div>
         </section>
 
-        <section class="price">
+        <!--<section class="price">
             <div class="price-container" >
                 <h2>Выбери свой персональный план</h2><br>
                 <p id="pp">Зарегистрируйтесь и выберете любой из предложенных пакетов услуг!</p>
@@ -113,7 +121,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> -->
 
         <section class="aboutus-section spad">
             <div class="container">
@@ -121,31 +129,30 @@
                         <div class="row">
                             <div class="col-xl-9 col-lg-10 m-auto">
                             <div class="section-title">
-                                <h2>Кто мы и что мы делаем</h2>
-                                <p>Сборище крутых профессионалов в области фитнеса, спорта и нутрициологии</p>
+                                <h2>Who we are</h2>
+                                <p>A gathering of cool professionals in the field of fitness, sports and nutrition</p>
                             </div>
                         </div>
                     </div>
-                    <img src="{% static 'firapp/img/about-us.jpg' %}}" alt="">
+                    <img src="{% static 'fitapp/img/about-us.jpg' %}}" alt="">
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="about-us">
-                                <h4>О нас</h4>
-                                <p>Сплав крутых спортсменов и разработчиков, которые объединили свои усилия для создание лучшего фитнес приложения в мире. Мы - быстро развивающийся стартап, который уже через 10 лет полностью подомнет под себя фитнес индустрию и станет королем Олимпа.</p>
-                                <p>Присоединяйтесь прямо сейчас, чтобы говорить, что вы стояли у истоков проекта. Настоящих олдов мы, конечно, будем поощрать скидочками, бонусами и подарками. 
-                                </p>
+                                <h4>About us</h4>
+                                <p>An amalgamation of cool athletes and developers who have joined forces to create the best fitness app in the world. We are a fast-growing startup that in 10 years will completely take over the fitness industry and become the king of Olympus.</p>
+                                <p>Join right now to say that you were at the origins of the project. Of course, we will encourage real old-timers with discounts, bonuses and gifts.</p>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="about-quality">
-                                <h4>Наши навыки</h4>
-                                <p>Занимаясь по нашим программам, вы без труда достигнете быстрого роста, и в кратчайшие сроки сможете добиться желаемого результата. Мы с удовольствием вам поможем, так как являемся лучшими в области:</p>
+                                <h4>Our skills</h4>
+                                <p>By following our programs, you will easily achieve rapid growth and will be able to achieve the desired result in the shortest possible time. We will be happy to help you, as we are the best in the field:</p>
                                 <ul>
-                                    <li>Силовых тренировок</li>
-                                    <li>Нутрициологии</li>
-                                    <li>Командных видах спорта</li>
-                                    <li>Легкой и тяжелой атлетике</li>
-                                    <li>Бодибилдинге и пауэрлифтинге</li>
+                                    <li>Strength training</li>
+                                    <li>Nutrition</li>
+                                    <li>Team sports</li>
+                                    <li>Track and field and weightlifting</li>
+                                    <li>Bodybuilding and powerlifting</li>
                                 </ul>
                             </div>
                         </div>

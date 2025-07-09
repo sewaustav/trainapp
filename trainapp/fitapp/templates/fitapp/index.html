@@ -24,47 +24,25 @@
     <body>
         {% block preloader %}{% endblock %}
 
-        <header class="header-section header-normal">
+        <header class="header-section">
             <div class="container-fluid">
                 <div class="logo">
-                    <a href="#">
-                        <img src="img/logo.png" alt="">
-                    </a>
-                    </div>
-                    <div class="container">
-                        <div class="nav-menu">
-                            <nav class="mainmenu mobile-menu">
-                                <ul>
-                                    <li><a href="main.html">Главная</a></li>
-                                    <li><a href="training-main.html">Тренировки</a></li>
-                                    <li><a href="calendar.html">Календарь</a></li>
-                                    <li><a href="other.html">Прочее</a></li>
-                                </ul>
-                            </nav>
-                        </div>
-                    </div>
-                <div id="mobile-menu-wrap"></div>
+                <a href="#">
+                    <img src="{% static 'fitapp/img/logo.png' %}" alt="Logo">
+                </a>
+                </div>
             </div>
         </header>
+
         {% block main %} {% endblock %}
         <footer>
-
-                <a href="#">Login</a>
                 <div class="footer-container">
-                    <h4>Наши контакты</h4>
                     <ul>
-                        <li>Telegram</li>
-                        <li>Discord</li>
-                        <li>Email</li>
-                    </ul>
-                    <h4>Наши соцсети</h4>
-                    <ul>
-                        <li>Instagram</li>
-                        <li>Telegram</li>
-                        <li>VK</li>
+                        <li></li>
+                        <li></li>
                     </ul>
                 </div>
-                <div>© 2025 Всеволод Устав. Все права защищены.</div>
+                <div>© 2025 Vsevolod Ustav. </div>
             </footer>
 
             <!-- JS -->
